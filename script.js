@@ -179,7 +179,7 @@ document.querySelectorAll(".chip").forEach((btn) => {
     targetType = btn.dataset.target;
     const isRp = targetType === "danacair" || targetType === "nominal";
     const labels = { danacair: "Target Dana Cair", nominal: "Target Profit", markup: "Markup Terhadap Modal", margin: "Margin Terhadap Harga Jual" };
-    const ph = { danacair: "36.048", nominal: "10.000", markup: "30", margin: "25" };
+    const ph = { danacair: "Masukkan nominal target", nominal: "Masukkan nominal target", markup: "Masukkan persentase", margin: "Masukkan persentase" };
     $("targetLabel").textContent = labels[targetType];
     $("targetPrefix").textContent = isRp ? "Rp" : "%";
     $("targetValue").placeholder = ph[targetType];
