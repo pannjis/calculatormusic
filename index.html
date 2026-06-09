@@ -7,192 +7,204 @@
   <title>Kalkulator Biaya Shopee — Dana Cair & Harga Jual</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-inner">
+  <header class="topbar">
+    <div class="container topbar-inner">
       <div class="brand">
-        <div class="brand-logo" aria-hidden="true">S</div>
+        <span class="brand-logo" aria-hidden="true">🛒</span>
         <div class="brand-text">
-          <h1>Kalkulator Biaya Shopee</h1>
-          <p>Hitung dana cair &amp; tentukan harga jual ideal</p>
+          <strong>Kalkulator Biaya Shopee</strong>
+          <span>Estimasi dana cair &amp; harga jual</span>
         </div>
       </div>
-      <button id="settingsToggle" class="btn-ghost" type="button" aria-expanded="false">
-        <span class="gear" aria-hidden="true">⚙</span> Pengaturan Biaya
-      </button>
     </div>
   </header>
 
-  <main class="container main-grid">
-    <!-- ====== Panel kiri: Input ====== -->
-    <section class="card input-card">
+  <main class="container layout">
+    <!-- ============ KOLOM INPUT ============ -->
+    <section class="panel">
       <div class="tabs" role="tablist" aria-label="Mode kalkulator">
         <button class="tab is-active" id="tabEarning" role="tab" aria-selected="true" data-mode="earning" type="button">
-          Hitung Penghasilan
+          <span class="tab-title">Hitung Penghasilan</span>
+          <span class="tab-sub">harga jual → dana cair</span>
         </button>
         <button class="tab" id="tabPricing" role="tab" aria-selected="false" data-mode="pricing" type="button">
-          Tentukan Harga Jual
+          <span class="tab-title">Tentukan Harga Jual</span>
+          <span class="tab-sub">target → harga jual</span>
         </button>
       </div>
 
-      <!-- Pengaturan biaya (collapsible) -->
-      <div id="settingsPanel" class="settings" hidden>
-        <div class="settings-head">
-          <h2>Pengaturan Persentase Biaya</h2>
-          <select id="presetSelect" class="select" aria-label="Preset tarif seller">
-            <option value="default">Default (contoh)</option>
-            <option value="nonstar">Non-Star Seller</option>
-            <option value="star">Star Seller</option>
-            <option value="starplus">Star+ Seller</option>
-            <option value="custom">Custom</option>
-          </select>
-        </div>
-        <p class="hint">Tarif tiap seller &amp; kategori berbeda. Sesuaikan dengan tarif di Seller Center kamu.</p>
-        <div class="settings-grid">
+      <div class="panel-body">
+        <!-- Mode: Hitung Penghasilan -->
+        <div id="earningInputs" class="mode">
           <label class="field">
-            <span>Biaya Administrasi (%)</span>
-            <input type="number" id="adminRate" value="8.48" step="0.01" min="0" />
+            <span class="label">Harga Jual</span>
+            <div class="input-rp">
+              <span class="prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="sellPrice" placeholder="41.664" />
+            </div>
           </label>
-          <label class="field">
-            <span>Premi (%)</span>
-            <input type="number" id="premiRate" value="0.5" step="0.01" min="0" />
-          </label>
-          <label class="field">
-            <span>Biaya Layanan (%)</span>
-            <input type="number" id="serviceRate" value="4.5" step="0.01" min="0" />
-          </label>
-          <label class="field">
-            <span>Biaya Tetap (Rp)</span>
-            <input type="number" id="fixedFee" value="0" step="100" min="0" />
-          </label>
-        </div>
-      </div>
-
-      <!-- Mode: Hitung Penghasilan -->
-      <div id="earningInputs" class="mode-inputs">
-        <label class="field">
-          <span>Harga Jual (Rp)</span>
-          <input type="text" inputmode="numeric" id="sellPrice" placeholder="contoh: 41.664" />
-        </label>
-        <label class="field">
-          <span>Modal / HPP per produk (Rp) <em>opsional</em></span>
-          <input type="text" inputmode="numeric" id="costPrice" placeholder="contoh: 25.000" />
-        </label>
-        <label class="field">
-          <span>Jumlah terjual <em>opsional</em></span>
-          <input type="text" inputmode="numeric" id="qty" placeholder="1" />
-        </label>
-      </div>
-
-      <!-- Mode: Tentukan Harga Jual -->
-      <div id="pricingInputs" class="mode-inputs" hidden>
-        <label class="field">
-          <span>Modal / HPP per produk (Rp) <em>opsional</em></span>
-          <input type="text" inputmode="numeric" id="costPrice2" placeholder="contoh: 25.000" />
-        </label>
-        <div class="field">
-          <span>Target keuntungan</span>
-          <div class="seg" role="group" aria-label="Tipe target">
-            <button type="button" class="seg-btn is-active" data-target="danacair">Dana Cair (Rp)</button>
-            <button type="button" class="seg-btn" data-target="nominal">Profit (Rp)</button>
-            <button type="button" class="seg-btn" data-target="markup">Markup (%)</button>
-            <button type="button" class="seg-btn" data-target="margin">Margin (%)</button>
+          <div class="field-row">
+            <label class="field">
+              <span class="label">Modal / HPP <i>opsional</i></span>
+              <div class="input-rp">
+                <span class="prefix">Rp</span>
+                <input type="text" inputmode="numeric" id="costPrice" placeholder="25.000" />
+              </div>
+            </label>
+            <label class="field qty-field">
+              <span class="label">Jumlah <i>opsional</i></span>
+              <input type="text" inputmode="numeric" id="qty" placeholder="1" />
+            </label>
           </div>
         </div>
-        <label class="field">
-          <span id="targetLabel">Target dana cair (Rp)</span>
-          <input type="text" inputmode="numeric" id="targetValue" placeholder="contoh: 36.048" />
-        </label>
-      </div>
 
-      <button id="calcBtn" class="btn-primary" type="button">Hitung</button>
+        <!-- Mode: Tentukan Harga Jual -->
+        <div id="pricingInputs" class="mode" hidden>
+          <div class="field">
+            <span class="label">Jenis target</span>
+            <div class="seg" role="group" aria-label="Tipe target">
+              <button type="button" class="seg-btn is-active" data-target="danacair">Dana Cair</button>
+              <button type="button" class="seg-btn" data-target="nominal">Profit Rp</button>
+              <button type="button" class="seg-btn" data-target="markup">Markup %</button>
+              <button type="button" class="seg-btn" data-target="margin">Margin %</button>
+            </div>
+          </div>
+          <label class="field">
+            <span class="label" id="targetLabel">Target dana cair</span>
+            <div class="input-rp" id="targetWrap">
+              <span class="prefix" id="targetPrefix">Rp</span>
+              <input type="text" inputmode="numeric" id="targetValue" placeholder="36.048" />
+            </div>
+          </label>
+          <label class="field">
+            <span class="label">Modal / HPP <i>opsional</i></span>
+            <div class="input-rp">
+              <span class="prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="costPrice2" placeholder="25.000" />
+            </div>
+          </label>
+        </div>
+
+        <!-- Pengaturan biaya -->
+        <details class="settings" id="settingsBox">
+          <summary>
+            <span class="summary-left">
+              <span class="gear" aria-hidden="true">⚙️</span> Pengaturan persentase biaya
+            </span>
+            <span class="chev" aria-hidden="true">▾</span>
+          </summary>
+          <div class="settings-inner">
+            <div class="settings-top">
+              <label class="label" for="presetSelect">Preset tarif seller</label>
+              <select id="presetSelect" class="select">
+                <option value="default">Default (contoh)</option>
+                <option value="nonstar">Non-Star Seller</option>
+                <option value="star">Star Seller</option>
+                <option value="starplus">Star+ Seller</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <p class="hint">Tarif berbeda tiap kategori &amp; level seller. Sesuaikan dengan tarif di Seller Center kamu.</p>
+            <div class="settings-grid">
+              <label class="field">
+                <span class="label">Biaya Administrasi (%)</span>
+                <input type="number" id="adminRate" value="8.48" step="0.01" min="0" />
+              </label>
+              <label class="field">
+                <span class="label">Premi (%)</span>
+                <input type="number" id="premiRate" value="0.5" step="0.01" min="0" />
+              </label>
+              <label class="field">
+                <span class="label">Biaya Layanan (%)</span>
+                <input type="number" id="serviceRate" value="4.5" step="0.01" min="0" />
+              </label>
+              <label class="field">
+                <span class="label">Biaya Tetap (Rp)</span>
+                <input type="number" id="fixedFee" value="0" step="100" min="0" />
+              </label>
+            </div>
+          </div>
+        </details>
+
+        <button id="calcBtn" class="btn-primary" type="button">Hitung Sekarang</button>
+      </div>
     </section>
 
-    <!-- ====== Panel kanan: Hasil ====== -->
-    <section class="card result-card">
-      <div class="result-head">
-        <h2 id="resultTitle">Rincian Penghasilan</h2>
-        <span class="badge" id="resultBadge">Estimasi</span>
-      </div>
-
-      <div id="emptyState" class="empty-state">
+    <!-- ============ KOLOM HASIL ============ -->
+    <section class="panel result" aria-live="polite">
+      <div id="emptyState" class="empty">
         <div class="empty-icon" aria-hidden="true">🧮</div>
-        <p>Masukkan data lalu klik <strong>Hitung</strong> untuk melihat rincian biaya dan dana cair.</p>
+        <h3>Belum ada hasil</h3>
+        <p>Isi data di sebelah kiri lalu klik <strong>Hitung Sekarang</strong>.</p>
       </div>
 
       <div id="resultContent" hidden>
-        <!-- Highlight harga jual (mode pricing) -->
-        <div id="priceHighlight" class="highlight" hidden>
-          <span>Harga Jual Disarankan</span>
-          <strong id="suggestedPrice">Rp0</strong>
+        <!-- Hero hasil -->
+        <div class="hero" id="heroBox">
+          <span class="hero-label" id="heroLabel">Estimasi Dana Cair</span>
+          <strong class="hero-value" id="heroValue">Rp0</strong>
+          <span class="hero-foot" id="heroFoot"></span>
         </div>
 
+        <!-- Rincian -->
         <div class="receipt">
           <div class="row strong">
-            <span>Subtotal Pesanan</span>
-            <span id="rSubtotal">Rp0</span>
+            <span>Subtotal Pesanan</span><span id="rSubtotal">Rp0</span>
           </div>
-          <div class="row muted">
-            <span>Harga Produk</span>
-            <span id="rProduct">Rp0</span>
+          <div class="row sub">
+            <span>Harga Produk</span><span id="rProduct">Rp0</span>
           </div>
 
-          <div class="row strong section">
-            <span>Biaya Lainnya</span>
-            <span id="rFeesTotal" class="neg">-Rp0</span>
+          <div class="divider"></div>
+
+          <div class="row strong">
+            <span>Total Biaya</span><span id="rFeesTotal" class="neg">-Rp0</span>
           </div>
-          <div class="row muted">
-            <span>Biaya Administrasi</span>
-            <span id="rAdmin" class="neg">-Rp0</span>
+          <div class="row sub">
+            <span>Biaya Administrasi</span><span id="rAdmin" class="neg">-Rp0</span>
           </div>
-          <div class="row muted">
-            <span>Premi</span>
-            <span id="rPremi" class="neg">-Rp0</span>
+          <div class="row sub">
+            <span>Premi</span><span id="rPremi" class="neg">-Rp0</span>
           </div>
-          <div class="row muted">
-            <span>Biaya Layanan</span>
-            <span id="rService" class="neg">-Rp0</span>
+          <div class="row sub">
+            <span>Biaya Layanan</span><span id="rService" class="neg">-Rp0</span>
           </div>
-          <div class="row muted" id="rowFixed" hidden>
-            <span>Biaya Tetap</span>
-            <span id="rFixed" class="neg">-Rp0</span>
+          <div class="row sub" id="rowFixed" hidden>
+            <span>Biaya Tetap</span><span id="rFixed" class="neg">-Rp0</span>
           </div>
+
+          <div class="divider"></div>
 
           <div class="row total">
-            <span>Estimasi Dana Cair</span>
-            <span id="rNet">Rp0</span>
+            <span>Estimasi Dana Cair</span><span id="rNet">Rp0</span>
           </div>
         </div>
 
-        <!-- Profit panel -->
-        <div id="profitPanel" class="profit-panel" hidden>
+        <!-- Profit -->
+        <div id="profitPanel" class="profit" hidden>
           <div class="profit-item">
-            <span>Modal</span>
-            <strong id="rCost">Rp0</strong>
+            <span>Modal</span><strong id="rCost">Rp0</strong>
+          </div>
+          <div class="profit-item" id="profitCell">
+            <span>Keuntungan</span><strong id="rProfit">Rp0</strong>
           </div>
           <div class="profit-item">
-            <span>Keuntungan Bersih</span>
-            <strong id="rProfit">Rp0</strong>
-          </div>
-          <div class="profit-item">
-            <span>Margin</span>
-            <strong id="rMargin">0%</strong>
+            <span>Margin</span><strong id="rMargin">0%</strong>
           </div>
         </div>
 
-        <p class="disclaimer">
-          *Hasil bersifat estimasi. Biaya aktual dapat berbeda mengikuti tarif &amp; program yang aktif di akun Shopee kamu.
-        </p>
+        <p class="disclaimer">*Estimasi. Biaya aktual mengikuti tarif &amp; program yang aktif di akun Shopee kamu.</p>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="footer">
     <div class="container">
-      <p>Dibuat untuk membantu seller menghitung biaya &amp; harga jual. Bukan afiliasi resmi Shopee.</p>
+      <p>Alat bantu hitung untuk seller. Bukan afiliasi resmi Shopee.</p>
     </div>
   </footer>
 
