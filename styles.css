@@ -131,7 +131,6 @@ body {
 .calc-body { padding: 32px; }
 
 .form-group { margin-bottom: 24px; }
-.form-group:last-child { margin-bottom: 0; }
 .form-group > label {
   display: block;
   font-size: .84rem;
@@ -225,7 +224,8 @@ body {
 .fee-settings {
   border: 1.5px solid var(--border);
   border-radius: var(--radius-sm);
-  margin-bottom: 28px;
+  margin-top: 16px;
+  margin-bottom: 32px;
   transition: border-color var(--transition);
 }
 .fee-settings[open] { border-color: var(--primary); }
