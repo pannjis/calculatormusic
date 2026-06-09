@@ -1,7 +1,10 @@
 "use strict";
 
 /* ============================================================
-   Shopee Fee Calculator
+   Shopee Fee Calculator — 3 Mode
+   1. Harga Jual Aman  (safePrice)
+   2. Dana Cair        (netCash)
+   3. Target Profit    (targetProfit)
    ============================================================ */
 
 const PRESETS = {
@@ -23,9 +26,9 @@ const pct = (id) => {
   return isNaN(v) ? 0 : v / 100;
 };
 
-let mode = "earning";
+let mode = "safePrice";
 
-// Format ribuan otomatis
+// Format ribuan otomatis untuk input rupiah
 function attachFormat(el) {
   if (!el) return;
   el.addEventListener("input", () => {
@@ -33,10 +36,10 @@ function attachFormat(el) {
     el.value = raw ? raw.toLocaleString("id-ID") : "";
   });
 }
-["sellPrice", "costPrice", "costPrice2", "targetValue"].forEach((id) => attachFormat($(id)));
+["spCost", "ncPrice", "ncCost", "tpCost", "tpProfit"].forEach((id) => attachFormat($(id)));
 
 // ============================================================
-//  Core
+//  Core — Fees & Breakdown
 // ============================================================
 function getFees() {
   return {
@@ -45,6 +48,11 @@ function getFees() {
     service: pct("serviceRate"),
     fixed: parseNum($("fixedFee").value),
   };
+}
+
+function totalRate() {
+  const f = getFees();
+  return f.admin + f.premi + f.service;
 }
 
 function breakdown(price) {
@@ -58,18 +66,18 @@ function breakdown(price) {
 }
 
 // ============================================================
-//  Render
+//  Render Helpers
 // ============================================================
 function showResult() {
   $("emptyState").hidden = true;
   $("emptyState").style.display = "none";
   $("resultContent").hidden = false;
   $("resultContent").style.display = "block";
-  // Auto scroll ke hasil
   setTimeout(() => {
     $("resultHero").scrollIntoView({ behavior: "smooth", block: "start" });
   }, 50);
 }
+
 function resetResult() {
   $("emptyState").hidden = false;
   $("emptyState").style.display = "";
@@ -77,27 +85,27 @@ function resetResult() {
   $("resultContent").style.display = "none";
 }
 
-function fillBreakdown(b, qty) {
-  $("rSubtotal").textContent = rupiah(b.price * qty);
-  $("rProduct").textContent = rupiah(b.price * qty);
-  $("rAdmin").textContent = "-" + rupiah(b.admin * qty);
-  $("rPremi").textContent = "-" + rupiah(b.premi * qty);
-  $("rService").textContent = "-" + rupiah(b.service * qty);
-  $("rFeesTotal").textContent = "-" + rupiah(b.total * qty);
-  $("rNet").textContent = rupiah(b.net * qty);
+function fillBreakdown(b) {
+  $("rSubtotal").textContent = rupiah(b.price);
+  $("rProduct").textContent = rupiah(b.price);
+  $("rAdmin").textContent = "-" + rupiah(b.admin);
+  $("rPremi").textContent = "-" + rupiah(b.premi);
+  $("rService").textContent = "-" + rupiah(b.service);
+  $("rFeesTotal").textContent = "-" + rupiah(b.total);
+  $("rNet").textContent = rupiah(b.net);
   if (b.fixed > 0) {
     $("rowFixed").hidden = false;
-    $("rFixed").textContent = "-" + rupiah(b.fixed * qty);
+    $("rFixed").textContent = "-" + rupiah(b.fixed);
   } else {
     $("rowFixed").hidden = true;
   }
 }
 
-function fillProfit(netTotal, costTotal) {
-  if (costTotal <= 0) { $("profitPanel").hidden = true; return; }
-  const profit = netTotal - costTotal;
-  const margin = netTotal > 0 ? (profit / netTotal) * 100 : 0;
-  $("rCost").textContent = rupiah(costTotal);
+function fillProfit(netAmount, costAmount) {
+  if (costAmount <= 0) { $("profitPanel").hidden = true; return; }
+  const profit = netAmount - costAmount;
+  const margin = netAmount > 0 ? (profit / netAmount) * 100 : 0;
+  $("rCost").textContent = rupiah(costAmount);
   $("rProfit").textContent = rupiah(profit);
   $("rMargin").textContent = margin.toFixed(1) + "%";
   const cell = $("profitCell");
@@ -106,48 +114,105 @@ function fillProfit(netTotal, costTotal) {
   $("profitPanel").hidden = false;
 }
 
-function renderEarning() {
-  const price = parseNum($("sellPrice").value);
-  if (price <= 0) { alert("Masukkan harga jual."); return; }
-  const cost = parseNum($("costPrice").value);
-  const qty = Math.max(1, parseNum($("qty").value) || 1);
-  const b = breakdown(price);
-
-  const hero = $("resultHero");
-  hero.className = "result-hero";
-  $("rhLabel").textContent = "Estimasi Dana Cair";
-  $("rhValue").textContent = rupiah(b.net * qty);
-  $("rhNote").textContent = qty > 1 ? `${qty} pcs \u00d7 ${rupiah(b.net)}/pcs` : `Dari harga jual ${rupiah(price)}`;
-
-  fillBreakdown(b, qty);
-  fillProfit(b.net * qty, cost * qty);
-  showResult();
-}
-
-function renderPricing() {
-  const cost = parseNum($("costPrice2").value);
-  const profit = parseNum($("targetValue").value); // bisa 0
+// ============================================================
+//  Mode 1: Harga Jual Aman
+//  Input: Modal + Margin% → Harga jual
+//  Formula: Harga = (Modal + Modal×Margin%) / (1 - totalRate)
+// ============================================================
+function renderSafePrice() {
+  const cost = parseNum($("spCost").value);
+  const marginInput = parseFloat($("spMargin").value);
   if (cost <= 0) { alert("Masukkan harga modal."); return; }
+  if (isNaN(marginInput) || marginInput < 0) { alert("Masukkan margin keuntungan (%)."); return; }
 
-  // Harga jual = (modal + target keuntungan + biaya tetap) / (1 - total rate)
   const f = getFees();
-  const k = 1 - (f.admin + f.premi + f.service);
-  const rawPrice = (cost + profit + f.fixed) / k;
+  const rate = f.admin + f.premi + f.service;
+  // Margin = profit / dana_cair → dana_cair = modal / (1 - margin%)
+  const targetNet = cost / (1 - marginInput / 100);
+  const rawPrice = (targetNet + f.fixed) / (1 - rate);
 
-  if (!isFinite(rawPrice) || rawPrice <= 0) { alert("Tidak bisa dihitung. Cek pengaturan biaya."); return; }
+  if (!isFinite(rawPrice) || rawPrice <= 0) {
+    alert("Tidak bisa dihitung. Total biaya ≥ 100%. Cek pengaturan biaya.");
+    return;
+  }
 
   const rounded = Math.ceil(rawPrice / 100) * 100;
   const b = breakdown(rounded);
+  const actualProfit = b.net - cost;
+  const actualMargin = b.net > 0 ? (actualProfit / b.net) * 100 : 0;
 
   const hero = $("resultHero");
-  hero.className = "result-hero pricing";
+  hero.className = "result-hero safe-price";
   $("rhLabel").textContent = "Harga Jual Aman";
   $("rhValue").textContent = rupiah(rounded);
-  $("rhNote").textContent = profit > 0
-    ? `Dana cair: ${rupiah(b.net)} — Keuntungan: ${rupiah(b.net - cost)}`
-    : `Dana cair: ${rupiah(b.net)} — Sudah aman balik modal`;
+  $("rhNote").textContent = `Dana cair: ${rupiah(b.net)} — Untung: ${rupiah(actualProfit)} (${actualMargin.toFixed(1)}%)`;
 
-  fillBreakdown(b, 1);
+  fillBreakdown(b);
+  fillProfit(b.net, cost);
+  showResult();
+}
+
+// ============================================================
+//  Mode 2: Dana Cair (Reverse)
+//  Input: Harga Jual → Dana cair
+//  Formula: Net = Harga × (1 - totalRate) - fixedFee
+// ============================================================
+function renderNetCash() {
+  const price = parseNum($("ncPrice").value);
+  if (price <= 0) { alert("Masukkan harga jual."); return; }
+
+  const cost = parseNum($("ncCost").value);
+  const b = breakdown(price);
+
+  const hero = $("resultHero");
+  hero.className = "result-hero net-cash";
+  $("rhLabel").textContent = "Estimasi Dana Cair";
+  $("rhValue").textContent = rupiah(b.net);
+
+  if (cost > 0) {
+    const profit = b.net - cost;
+    $("rhNote").textContent = `Dari harga ${rupiah(price)} — Untung: ${rupiah(profit)}`;
+  } else {
+    $("rhNote").textContent = `Dari harga jual ${rupiah(price)}`;
+  }
+
+  fillBreakdown(b);
+  fillProfit(b.net, cost);
+  showResult();
+}
+
+// ============================================================
+//  Mode 3: Target Profit
+//  Input: Modal + Target Profit Rp → Harga jual
+//  Formula: Harga = (Modal + TargetProfit + fixedFee) / (1 - totalRate)
+// ============================================================
+function renderTargetProfit() {
+  const cost = parseNum($("tpCost").value);
+  const target = parseNum($("tpProfit").value);
+  if (cost <= 0) { alert("Masukkan harga modal."); return; }
+  if (target <= 0) { alert("Masukkan target profit."); return; }
+
+  const f = getFees();
+  const rate = f.admin + f.premi + f.service;
+  const rawPrice = (cost + target + f.fixed) / (1 - rate);
+
+  if (!isFinite(rawPrice) || rawPrice <= 0) {
+    alert("Tidak bisa dihitung. Total biaya ≥ 100%. Cek pengaturan biaya.");
+    return;
+  }
+
+  const rounded = Math.ceil(rawPrice / 100) * 100;
+  const b = breakdown(rounded);
+  const actualProfit = b.net - cost;
+  const actualMargin = b.net > 0 ? (actualProfit / b.net) * 100 : 0;
+
+  const hero = $("resultHero");
+  hero.className = "result-hero target-profit";
+  $("rhLabel").textContent = "Harga Jual untuk Target Profit";
+  $("rhValue").textContent = rupiah(rounded);
+  $("rhNote").textContent = `Dana cair: ${rupiah(b.net)} — Untung aktual: ${rupiah(actualProfit)} (${actualMargin.toFixed(1)}%)`;
+
+  fillBreakdown(b);
   fillProfit(b.net, cost);
   showResult();
 }
@@ -155,13 +220,20 @@ function renderPricing() {
 // ============================================================
 //  Events
 // ============================================================
+const PANELS = {
+  safePrice: "safePricePanel",
+  netCash: "netCashPanel",
+  targetProfit: "targetProfitPanel",
+};
+
 function setMode(m) {
   mode = m;
   document.querySelectorAll(".calc-tab").forEach((t) => {
     t.classList.toggle("active", t.dataset.mode === m);
   });
-  $("earningPanel").hidden = m !== "earning";
-  $("pricingPanel").hidden = m !== "pricing";
+  Object.entries(PANELS).forEach(([key, id]) => {
+    $(id).hidden = key !== m;
+  });
   resetResult();
 }
 
@@ -183,7 +255,9 @@ $("presetSelect").addEventListener("change", (e) => {
 });
 
 $("calcBtn").addEventListener("click", () => {
-  mode === "earning" ? renderEarning() : renderPricing();
+  if (mode === "safePrice") renderSafePrice();
+  else if (mode === "netCash") renderNetCash();
+  else if (mode === "targetProfit") renderTargetProfit();
 });
 
 document.querySelectorAll('input[type="text"]').forEach((inp) => {

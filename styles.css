@@ -70,7 +70,7 @@ body {
 .hero-sub {
   font-size: clamp(.85rem, 1.8vw, 1rem);
   opacity: .9;
-  max-width: 560px;
+  max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
 }
@@ -92,39 +92,72 @@ body {
   margin-bottom: 28px;
 }
 
-/* ===== TABS ===== */
+/* ===== TABS — 3 columns ===== */
 .calc-tabs {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   border-bottom: 1px solid var(--border);
 }
 .calc-tab {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 18px 24px;
+  padding: 18px 20px;
   border: none;
   background: var(--bg);
   cursor: pointer;
-  transition: background var(--transition);
+  transition: background var(--transition), box-shadow var(--transition);
   text-align: left;
+  position: relative;
+}
+.calc-tab + .calc-tab {
+  border-left: 1px solid var(--border);
 }
 .calc-tab.active {
   background: var(--card);
   box-shadow: inset 0 -3px 0 var(--primary);
 }
+.calc-tab:hover:not(.active) {
+  background: #f1f5f9;
+}
 .calc-tab-icon { width: 20px; height: 20px; color: var(--text-secondary); flex-shrink: 0; }
 .calc-tab.active .calc-tab-icon { color: var(--primary); }
 .calc-tab-text strong {
   display: block;
-  font-size: .88rem;
+  font-size: .84rem;
   font-weight: 700;
   color: var(--text-secondary);
 }
 .calc-tab.active .calc-tab-text strong { color: var(--primary); }
 .calc-tab-text small {
-  font-size: .74rem;
+  font-size: .72rem;
   color: var(--text-secondary);
+}
+
+/* ===== MODE DESCRIPTION ===== */
+.mode-desc {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #f0f9ff, #eff6ff);
+  border: 1px solid #dbeafe;
+  border-radius: var(--radius-sm);
+  margin-bottom: 28px;
+}
+.mode-desc-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.mode-desc p {
+  font-size: .82rem;
+  color: #475569;
+  line-height: 1.6;
+}
+.mode-desc p strong {
+  color: var(--primary);
 }
 
 /* ===== FORM ===== */
@@ -162,6 +195,15 @@ body {
   border-right: 1.5px solid var(--border);
   white-space: nowrap;
 }
+.input-suffix-lg {
+  display: flex; align-items: center;
+  padding: 0 16px;
+  background: var(--bg);
+  font-weight: 600; font-size: .88rem;
+  color: var(--text-secondary);
+  border-left: 1.5px solid var(--border);
+  white-space: nowrap;
+}
 .input-wrap input {
   flex: 1;
   border: none; outline: none;
@@ -196,29 +238,6 @@ body {
   color: var(--text-secondary);
   border-left: 1.5px solid var(--border);
 }
-
-/* ===== CHIPS ===== */
-.chip-group { display: flex; flex-wrap: wrap; gap: 10px; }
-.chip {
-  display: flex; align-items: center; gap: 6px;
-  padding: 10px 16px;
-  border: 1.5px solid var(--border);
-  border-radius: 999px;
-  background: var(--card);
-  font-family: inherit;
-  font-size: .82rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: all var(--transition);
-}
-.chip:hover { border-color: var(--primary); color: var(--primary); }
-.chip.active {
-  background: var(--primary-light);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-.chip-icon { width: 14px; height: 14px; flex-shrink: 0; }
 
 /* ===== FEE SETTINGS ===== */
 .fee-settings {
@@ -308,16 +327,23 @@ body {
 .result-empty h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 .result-empty p { font-size: .85rem; }
 
-/* Result Hero */
+/* Result Hero — different gradient per mode */
 .result-hero {
   padding: 32px 28px;
   text-align: center;
   background: linear-gradient(135deg, #1e2a3a, #334155);
   color: #fff;
 }
-.result-hero.pricing {
+.result-hero.safe-price {
+  background: linear-gradient(135deg, #059669, #047857);
+}
+.result-hero.net-cash {
+  background: linear-gradient(135deg, #1e2a3a, #334155);
+}
+.result-hero.target-profit {
   background: linear-gradient(135deg, var(--primary), var(--primary-dark));
 }
+
 .rh-label { display: block; font-size: .84rem; opacity: .85; margin-bottom: 6px; font-weight: 500; }
 .rh-value { display: block; font-size: 2.2rem; font-weight: 900; letter-spacing: -.03em; }
 .rh-note { display: block; font-size: .78rem; opacity: .7; margin-top: 8px; }
@@ -367,10 +393,28 @@ body {
 @media (max-width: 768px) {
   .main { margin-top: -28px; }
   .calc-body { padding: 24px 20px; }
-  .calc-tab { padding: 14px 16px; gap: 10px; }
+  .calc-tab { padding: 14px 14px; gap: 10px; }
+  .calc-tab-text strong { font-size: .78rem; }
   .breakdown { padding: 20px; }
   .stats { padding: 0 20px 20px; }
 }
+
+@media (max-width: 600px) {
+  .calc-tabs {
+    grid-template-columns: 1fr;
+  }
+  .calc-tab + .calc-tab {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+  .calc-tab {
+    padding: 14px 20px;
+  }
+  .calc-tab.active {
+    box-shadow: inset 4px 0 0 var(--primary);
+  }
+}
+
 @media (max-width: 480px) {
   .wrap { padding: 0 16px; }
   .hero-section { padding: 36px 0 48px; }
@@ -378,7 +422,6 @@ body {
   .calc-tab-text small { display: none; }
   .fee-grid { grid-template-columns: 1fr; }
   .stats { grid-template-columns: 1fr; gap: 8px; }
-  .chip-group { gap: 8px; }
-  .chip { padding: 8px 12px; font-size: .78rem; }
   .result-disclaimer { padding: 0 16px 16px; }
+  .mode-desc { flex-direction: column; gap: 8px; }
 }

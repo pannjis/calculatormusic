@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Kalkulator biaya admin Shopee: hitung dana cair dan tentukan harga jual ideal." />
-  <title>Shopee Fee Calculator — Dana Cair & Harga Jual</title>
+  <meta name="description" content="Kalkulator biaya admin Shopee: hitung harga jual aman, dana cair, dan target profit." />
+  <title>Shopee Fee Calculator — Harga Jual, Dana Cair & Profit</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -29,7 +29,7 @@
   <header class="hero-section">
     <div class="wrap">
       <h1>Kalkulator Biaya Admin Shopee</h1>
-      <p class="hero-sub">Hitung estimasi dana cair setelah potongan biaya, atau tentukan harga jual ideal berdasarkan target yang kamu inginkan.</p>
+      <p class="hero-sub">Hitung harga jual aman, estimasi dana cair, atau tentukan harga berdasarkan target profit — sudah termasuk potongan biaya Shopee.</p>
     </div>
   </header>
 
@@ -37,64 +37,94 @@
   <main class="wrap main">
     <div class="calculator">
 
-      <!-- Tab switcher -->
+      <!-- Tab switcher — 3 tabs -->
       <div class="calc-tabs">
-        <button class="calc-tab active" data-mode="earning" type="button">
-          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-          <span class="calc-tab-text">
-            <strong>Hitung Penghasilan</strong>
-            <small>Harga jual &rarr; Dana cair</small>
-          </span>
-        </button>
-        <button class="calc-tab" data-mode="pricing" type="button">
+        <button class="calc-tab active" data-mode="safePrice" type="button">
           <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
           <span class="calc-tab-text">
-            <strong>Tentukan Harga Jual</strong>
-            <small>Target &rarr; Harga ideal</small>
+            <strong>Harga Jual Aman</strong>
+            <small>Modal + Margin → Harga</small>
+          </span>
+        </button>
+        <button class="calc-tab" data-mode="netCash" type="button">
+          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          <span class="calc-tab-text">
+            <strong>Dana Cair</strong>
+            <small>Harga Jual → Dana Diterima</small>
+          </span>
+        </button>
+        <button class="calc-tab" data-mode="targetProfit" type="button">
+          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          <span class="calc-tab-text">
+            <strong>Target Profit</strong>
+            <small>Modal + Profit Rp → Harga</small>
           </span>
         </button>
       </div>
 
       <div class="calc-body">
-        <!-- ===== MODE: EARNING ===== -->
-        <div class="mode-panel" id="earningPanel">
+        <!-- ===== MODE: HARGA JUAL AMAN ===== -->
+        <div class="mode-panel" id="safePricePanel">
+          <div class="mode-desc">
+            <span class="mode-desc-icon">🏷️</span>
+            <p>Masukkan harga modal dan margin keuntungan yang kamu inginkan. Kalkulator akan menghitung <strong>harga jual aman</strong> yang sudah memperhitungkan potongan biaya Shopee.</p>
+          </div>
           <div class="form-group">
-            <label for="sellPrice">Harga Jual</label>
+            <label for="spCost">Harga Modal / HPP</label>
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="sellPrice" placeholder="Masukkan harga jual" autocomplete="off" />
+              <input type="text" inputmode="numeric" id="spCost" placeholder="Masukkan harga modal" autocomplete="off" />
             </div>
           </div>
           <div class="form-group">
-            <label for="costPrice">Modal / HPP <span class="opt">(opsional)</span></label>
+            <label for="spMargin">Margin Keuntungan</label>
             <div class="input-wrap">
-              <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="costPrice" placeholder="Masukkan modal" autocomplete="off" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="qty">Jumlah Terjual <span class="opt">(opsional)</span></label>
-            <div class="input-wrap">
-              <span class="input-prefix">Qty</span>
-              <input type="text" inputmode="numeric" id="qty" placeholder="Masukkan jumlah" autocomplete="off" />
+              <input type="number" id="spMargin" placeholder="Masukkan margin" step="0.1" min="0" autocomplete="off" />
+              <span class="input-suffix-lg">%</span>
             </div>
           </div>
         </div>
 
-        <!-- ===== MODE: PRICING ===== -->
-        <div class="mode-panel" id="pricingPanel" hidden>
+        <!-- ===== MODE: DANA CAIR ===== -->
+        <div class="mode-panel" id="netCashPanel" hidden>
+          <div class="mode-desc">
+            <span class="mode-desc-icon">💰</span>
+            <p>Masukkan harga jual produk di Shopee. Kalkulator akan menghitung <strong>berapa dana yang kamu terima</strong> setelah semua potongan biaya.</p>
+          </div>
           <div class="form-group">
-            <label for="costPrice2">Harga Modal</label>
+            <label for="ncPrice">Harga Jual di Shopee</label>
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="costPrice2" placeholder="Masukkan harga modal" autocomplete="off" />
+              <input type="text" inputmode="numeric" id="ncPrice" placeholder="Masukkan harga jual" autocomplete="off" />
             </div>
           </div>
           <div class="form-group">
-            <label for="targetValue">Target Keuntungan <span class="opt">(isi 0 jika hanya ingin balik modal)</span></label>
+            <label for="ncCost">Harga Modal / HPP <span class="opt">(opsional — untuk hitung profit)</span></label>
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="targetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
+              <input type="text" inputmode="numeric" id="ncCost" placeholder="Masukkan harga modal" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== MODE: TARGET PROFIT ===== -->
+        <div class="mode-panel" id="targetProfitPanel" hidden>
+          <div class="mode-desc">
+            <span class="mode-desc-icon">🎯</span>
+            <p>Masukkan harga modal dan jumlah keuntungan bersih yang kamu inginkan. Kalkulator akan menghitung <strong>harga jual yang diperlukan</strong> untuk mencapai target profit tersebut.</p>
+          </div>
+          <div class="form-group">
+            <label for="tpCost">Harga Modal / HPP</label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="tpCost" placeholder="Masukkan harga modal" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tpProfit">Target Profit Bersih</label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="tpProfit" placeholder="Masukkan target keuntungan" autocomplete="off" />
             </div>
           </div>
         </div>
@@ -170,7 +200,7 @@
         <!-- Filled state -->
         <div id="resultContent" hidden>
           <div class="result-hero" id="resultHero">
-            <span class="rh-label" id="rhLabel">Estimasi Dana Cair</span>
+            <span class="rh-label" id="rhLabel">Harga Jual Aman</span>
             <span class="rh-value" id="rhValue">Rp0</span>
             <span class="rh-note" id="rhNote"></span>
           </div>
