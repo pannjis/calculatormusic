@@ -24,7 +24,6 @@ const pct = (id) => {
 };
 
 let mode = "earning";
-let targetType = "danacair";
 
 // Format ribuan otomatis
 function attachFormat(el) {
@@ -56,21 +55,6 @@ function breakdown(price) {
   const total = admin + premi + service + f.fixed;
   const net = price - total;
   return { price, admin, premi, service, fixed: f.fixed, total, net };
-}
-
-function priceFromTarget(type, target, cost) {
-  const f = getFees();
-  const k = 1 - (f.admin + f.premi + f.service);
-  switch (type) {
-    case "danacair": return (target + f.fixed) / k;
-    case "nominal": return (cost + target + f.fixed) / k;
-    case "markup": return (cost + cost * (target / 100) + f.fixed) / k;
-    case "margin": {
-      const denom = k - target / 100;
-      return denom > 0 ? (cost + f.fixed) / denom : NaN;
-    }
-    default: return NaN;
-  }
 }
 
 // ============================================================
@@ -141,22 +125,27 @@ function renderEarning() {
 }
 
 function renderPricing() {
-  const target = parseNum($("targetValue").value);
   const cost = parseNum($("costPrice2").value);
-  if (target <= 0) { alert("Masukkan nilai target."); return; }
-  if (targetType !== "danacair" && cost <= 0) { alert("Masukkan modal / HPP."); return; }
+  const profit = parseNum($("targetValue").value); // bisa 0
+  if (cost <= 0) { alert("Masukkan harga modal."); return; }
 
-  const rawPrice = priceFromTarget(targetType, target, cost);
-  if (!isFinite(rawPrice) || rawPrice <= 0) { alert("Target terlalu tinggi. Turunkan nilainya."); return; }
+  // Harga jual = (modal + target keuntungan + biaya tetap) / (1 - total rate)
+  const f = getFees();
+  const k = 1 - (f.admin + f.premi + f.service);
+  const rawPrice = (cost + profit + f.fixed) / k;
+
+  if (!isFinite(rawPrice) || rawPrice <= 0) { alert("Tidak bisa dihitung. Cek pengaturan biaya."); return; }
 
   const rounded = Math.ceil(rawPrice / 100) * 100;
   const b = breakdown(rounded);
 
   const hero = $("resultHero");
   hero.className = "result-hero pricing";
-  $("rhLabel").textContent = "Harga Jual Disarankan";
+  $("rhLabel").textContent = "Harga Jual Aman";
   $("rhValue").textContent = rupiah(rounded);
-  $("rhNote").textContent = `Dana cair: ${rupiah(b.net)}`;
+  $("rhNote").textContent = profit > 0
+    ? `Dana cair: ${rupiah(b.net)} — Keuntungan: ${rupiah(b.net - cost)}`
+    : `Dana cair: ${rupiah(b.net)} — Sudah aman balik modal`;
 
   fillBreakdown(b, 1);
   fillProfit(b.net, cost);
@@ -179,21 +168,6 @@ function setMode(m) {
 document.querySelectorAll(".calc-tab").forEach((t) =>
   t.addEventListener("click", () => setMode(t.dataset.mode))
 );
-
-document.querySelectorAll(".chip").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".chip").forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
-    targetType = btn.dataset.target;
-    const isRp = targetType === "danacair" || targetType === "nominal";
-    const labels = { danacair: "Target Dana Cair", nominal: "Target Profit", markup: "Markup Terhadap Modal", margin: "Margin Terhadap Harga Jual" };
-    const ph = { danacair: "Masukkan nominal target", nominal: "Masukkan nominal target", markup: "Masukkan persentase", margin: "Masukkan persentase" };
-    $("targetLabel").textContent = labels[targetType];
-    $("targetPrefix").textContent = isRp ? "Rp" : "%";
-    $("targetValue").placeholder = ph[targetType];
-    $("targetValue").value = "";
-  });
-});
 
 $("presetSelect").addEventListener("change", (e) => {
   const p = PRESETS[e.target.value];

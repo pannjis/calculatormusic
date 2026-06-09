@@ -84,38 +84,17 @@
         <!-- ===== MODE: PRICING ===== -->
         <div class="mode-panel" id="pricingPanel" hidden>
           <div class="form-group">
-            <label>Jenis Target</label>
-            <div class="chip-group">
-              <button type="button" class="chip active" data-target="danacair">
-                <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                Dana Cair
-              </button>
-              <button type="button" class="chip" data-target="nominal">
-                <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-                Profit Rp
-              </button>
-              <button type="button" class="chip" data-target="markup">
-                <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                Markup %
-              </button>
-              <button type="button" class="chip" data-target="margin">
-                <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-                Margin %
-              </button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="targetValue" id="targetLabel">Target Dana Cair</label>
-            <div class="input-wrap">
-              <span class="input-prefix" id="targetPrefix">Rp</span>
-              <input type="text" inputmode="numeric" id="targetValue" placeholder="Masukkan nominal target" autocomplete="off" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="costPrice2">Modal / HPP <span class="opt">(opsional untuk Dana Cair)</span></label>
+            <label for="costPrice2">Harga Modal</label>
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="costPrice2" placeholder="Masukkan modal" autocomplete="off" />
+              <input type="text" inputmode="numeric" id="costPrice2" placeholder="Masukkan harga modal" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="targetValue">Target Keuntungan <span class="opt">(isi 0 jika hanya ingin balik modal)</span></label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="targetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
             </div>
           </div>
         </div>
