@@ -37,7 +37,7 @@ function attachFormat(el) {
 ["sellPrice", "costPrice", "costPrice2", "targetValue"].forEach((id) => attachFormat($(id)));
 
 // ============================================================
-//  Core calculation
+//  Core
 // ============================================================
 function getFees() {
   return {
@@ -80,7 +80,6 @@ function showResult() {
   $("emptyState").hidden = true;
   $("resultContent").hidden = false;
 }
-
 function resetResult() {
   $("emptyState").hidden = false;
   $("resultContent").hidden = true;
@@ -124,10 +123,9 @@ function renderEarning() {
 
   const hero = $("resultHero");
   hero.className = "result-hero";
-  $("rhBadge").textContent = "ESTIMASI";
-  $("rhLabel").textContent = "Dana Cair";
+  $("rhLabel").textContent = "Estimasi Dana Cair";
   $("rhValue").textContent = rupiah(b.net * qty);
-  $("rhNote").textContent = qty > 1 ? `${qty} pcs × ${rupiah(b.net)}/pcs` : `Dari harga jual ${rupiah(price)}`;
+  $("rhNote").textContent = qty > 1 ? `${qty} pcs \u00d7 ${rupiah(b.net)}/pcs` : `Dari harga jual ${rupiah(price)}`;
 
   fillBreakdown(b, qty);
   fillProfit(b.net * qty, cost * qty);
@@ -148,8 +146,7 @@ function renderPricing() {
 
   const hero = $("resultHero");
   hero.className = "result-hero pricing";
-  $("rhBadge").textContent = "DISARANKAN";
-  $("rhLabel").textContent = "Harga Jual";
+  $("rhLabel").textContent = "Harga Jual Disarankan";
   $("rhValue").textContent = rupiah(rounded);
   $("rhNote").textContent = `Dana cair: ${rupiah(b.net)}`;
 
@@ -163,7 +160,7 @@ function renderPricing() {
 // ============================================================
 function setMode(m) {
   mode = m;
-  document.querySelectorAll(".tab").forEach((t) => {
+  document.querySelectorAll(".calc-tab").forEach((t) => {
     t.classList.toggle("active", t.dataset.mode === m);
   });
   $("earningPanel").hidden = m !== "earning";
@@ -171,7 +168,7 @@ function setMode(m) {
   resetResult();
 }
 
-document.querySelectorAll(".tab").forEach((t) =>
+document.querySelectorAll(".calc-tab").forEach((t) =>
   t.addEventListener("click", () => setMode(t.dataset.mode))
 );
 
