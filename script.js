@@ -33,7 +33,7 @@ const rate = (id) => {
 
 // ---- State ----
 let mode = "earning";       // earning | pricing
-let targetType = "nominal"; // nominal | markup | margin
+let targetType = "danacair"; // danacair | nominal | markup | margin
 
 // ============================================================
 //  Auto-format input ribuan
@@ -95,7 +95,11 @@ function computePrice(cost, type, target) {
 
   let price = 0;
 
-  if (type === "nominal") {
+  if (type === "danacair") {
+    // target adalah dana cair yang ingin diterima
+    // net = price*k - fixed = target  ->  price = (target + fixed) / k
+    price = (target + r.fixed) / k;
+  } else if (type === "nominal") {
     // net - cost = target ; net = price*k - fixed
     // price*k - fixed - cost = target
     price = (cost + target + r.fixed) / k;
@@ -162,8 +166,12 @@ function renderPricing() {
   const cost = parseNum($("costPrice2").value);
   const target = parseNum($("targetValue").value);
 
-  if (cost <= 0) {
+  if (targetType !== "danacair" && cost <= 0) {
     alert("Masukkan modal / HPP terlebih dahulu.");
+    return;
+  }
+  if (target <= 0) {
+    alert("Masukkan nilai target terlebih dahulu.");
     return;
   }
 
@@ -197,7 +205,7 @@ function renderPricing() {
   $("rProfit").textContent = rupiah(profit);
   $("rMargin").textContent = margin.toFixed(1) + "%";
   paintProfit("rProfit", profit >= 0);
-  $("profitPanel").hidden = false;
+  $("profitPanel").hidden = cost <= 0;
 
   $("resultTitle").textContent = "Simulasi Harga Jual";
   showResult();
@@ -247,11 +255,12 @@ document.querySelectorAll(".seg-btn").forEach((btn) => {
     btn.classList.add("is-active");
     targetType = btn.dataset.target;
     const labels = {
+      danacair: "Target dana cair (Rp)",
       nominal: "Target profit (Rp)",
       markup: "Markup terhadap modal (%)",
       margin: "Margin terhadap harga jual (%)",
     };
-    const placeholders = { nominal: "contoh: 10.000", markup: "contoh: 30", margin: "contoh: 25" };
+    const placeholders = { danacair: "contoh: 36.048", nominal: "contoh: 10.000", markup: "contoh: 30", margin: "contoh: 25" };
     $("targetLabel").textContent = labels[targetType];
     const tv = $("targetValue");
     tv.placeholder = placeholders[targetType];

@@ -7,7 +7,7 @@ Dibuat dengan HTML, CSS, dan JavaScript murni (tanpa build step), sehingga bisa 
 ## Fitur
 
 - **Mode Hitung Penghasilan** — masukkan harga jual (opsional: modal & jumlah terjual) untuk melihat rincian potongan biaya, dana cair, keuntungan bersih, dan margin.
-- **Mode Tentukan Harga Jual** — masukkan modal dan target keuntungan (nominal / markup % / margin %), lalu dapatkan harga jual yang disarankan.
+- **Mode Tentukan Harga Jual** — masukkan target lalu dapatkan harga jual yang disarankan. Tipe target: **dana cair (Rp)**, profit nominal (Rp), markup (%), atau margin (%).
 - **Pengaturan persentase biaya** dengan preset seller (Non-Star, Star, Star+) atau custom — karena tarif tiap akun & kategori berbeda.
 - Tampilan rincian mirip struk Shopee, responsif untuk HP, format Rupiah otomatis.
 
@@ -30,6 +30,7 @@ Contoh validasi (harga Rp41.664): admin Rp3.533, premi Rp208, layanan Rp1.875 �
 Dengan `r` = total persentase biaya dan `f` = biaya tetap:
 
 - Dana cair = `harga × (1 − r) − f`
+- Target dana cair → harga = `(target + f) / (1 − r)`
 - Target nominal → harga = `(modal + target + f) / (1 − r)`
 - Target markup % → harga = `(modal + modal×markup% + f) / (1 − r)`
 - Target margin % → harga = `(modal + f) / (1 − r − margin%)`
