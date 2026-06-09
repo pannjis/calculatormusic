@@ -79,6 +79,10 @@ function priceFromTarget(type, target, cost) {
 function showResult() {
   $("emptyState").hidden = true;
   $("resultContent").hidden = false;
+  // Auto scroll ke hasil pada mobile
+  setTimeout(() => {
+    $("resultWrapper").scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 100);
 }
 function resetResult() {
   $("emptyState").hidden = false;
