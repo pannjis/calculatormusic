@@ -78,15 +78,19 @@ function priceFromTarget(type, target, cost) {
 // ============================================================
 function showResult() {
   $("emptyState").hidden = true;
+  $("emptyState").style.display = "none";
   $("resultContent").hidden = false;
-  // Auto scroll ke hasil pada mobile
+  $("resultContent").style.display = "block";
+  // Auto scroll ke hasil
   setTimeout(() => {
-    $("resultWrapper").scrollIntoView({ behavior: "smooth", block: "start" });
-  }, 100);
+    $("resultHero").scrollIntoView({ behavior: "smooth", block: "start" });
+  }, 50);
 }
 function resetResult() {
   $("emptyState").hidden = false;
+  $("emptyState").style.display = "";
   $("resultContent").hidden = true;
+  $("resultContent").style.display = "none";
 }
 
 function fillBreakdown(b, qty) {
