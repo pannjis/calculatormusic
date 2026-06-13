@@ -41,8 +41,8 @@
         <label for="modeSelect" class="calc-header-label">Pilih Kalkulator</label>
         <div class="select-wrap">
           <select id="modeSelect" class="mode-select">
+            <option value="pricing" selected>Tentukan Harga Jual — Modal &rarr; Harga aman</option>
             <option value="earning">Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
-            <option value="pricing">Tentukan Harga Jual — Modal &rarr; Harga aman</option>
             <option value="targetNet">Target Dana Cair — Modal + Target &rarr; Harga jual</option>
           </select>
           <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -51,7 +51,7 @@
 
       <div class="calc-body">
         <!-- MODE: HITUNG PENGHASILAN -->
-        <div class="mode-panel" id="earningPanel">
+        <div class="mode-panel" id="earningPanel" hidden>
           <div class="form-group">
             <label for="sellPrice">Harga Jual di Shopee</label>
             <div class="input-wrap">
@@ -69,7 +69,7 @@
         </div>
 
         <!-- MODE: TENTUKAN HARGA JUAL -->
-        <div class="mode-panel" id="pricingPanel" hidden>
+        <div class="mode-panel" id="pricingPanel">
           <div class="form-group">
             <label for="costPrice2">Harga Modal / HPP</label>
             <div class="input-wrap">
@@ -215,7 +215,7 @@
         </details>
 
         <!-- BIAYA TAMBAHAN (hanya untuk mode Tentukan Harga Jual) -->
-        <div class="extra-costs-section" id="extraCostsSection" hidden>
+        <div class="extra-costs-section" id="extraCostsSection">
           <div class="extra-costs-header">
             <label class="extra-costs-label">Biaya Tambahan <span class="opt">(opsional)</span></label>
             <button type="button" id="addCostBtn" class="btn-add">

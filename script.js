@@ -16,9 +16,9 @@ const parseNum = (str) => {
 };
 const pct = (id) => { const v = parseFloat($(id).value); return isNaN(v) ? 0 : v / 100; };
 
-let mode = "earning";
+let mode = "pricing";
 let platform = "shopee";
-let profitType = "nominal"; // nominal | percent
+let profitType = "nominal";
 let ttProfitType = "nominal";
 
 // Format ribuan
