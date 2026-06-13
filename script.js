@@ -27,11 +27,13 @@ function attachFormat(el) {
     el.value = raw ? raw.toLocaleString("id-ID") : "";
   });
 }
-["sellPrice", "costPrice", "costPrice2", "targetValue", "ttSellPrice", "ttCostPrice", "ttCostPrice2", "ttTargetValue"].forEach((id) => attachFormat($(id)));
+["sellPrice", "costPrice", "costPrice2", "targetValue", "ttSellPrice", "ttCostPrice", "ttCostPrice2", "ttTargetValue", "tnCost", "tnTarget", "ttTnCost", "ttTnTarget"].forEach((id) => attachFormat($(id)));
 
 function getActiveMode() {
   if (platform === "shopee") return mode;
-  return mode === "earning" ? "tiktokEarning" : "tiktokPricing";
+  if (mode === "earning") return "tiktokEarning";
+  if (mode === "pricing") return "tiktokPricing";
+  return "tiktokTargetNet";
 }
 
 // Core
@@ -224,6 +226,74 @@ function setTTLabels() {
   document.querySelector('[id="rFixed"]').parentElement.querySelector("span:first-child").textContent = ttLabels.fixed;
 }
 
+// ============================================================
+//  Target Dana Cair — Shopee
+// ============================================================
+function renderTargetNet() {
+  const target = parseNum($("tnTarget").value);
+  const cost = parseNum($("tnCost").value);
+  if (target <= 0) { alert("Masukkan target dana cair."); return; }
+
+  // net = price - floor(price*admin) - ceil(price*premi) - ceil(price*service) - fixed
+  // Approx: net ≈ price * (1 - totalRate) - fixed
+  // So price ≈ (target + fixed) / (1 - totalRate), then iterate to exact
+  const f = getFees();
+  const totalRate = f.admin + f.premi + f.service;
+  let price = Math.ceil((target + f.fixed) / (1 - totalRate));
+
+  // Iterate up until net >= target
+  for (let i = 0; i < 200; i++) {
+    const b = breakdown(price);
+    if (b.net >= target) break;
+    price++;
+  }
+
+  const b = breakdown(price);
+
+  setShopeeLabels();
+  $("resultHero").className = "result-hero pricing";
+  $("rhLabel").textContent = "Harga Jual untuk Target Dana Cair";
+  $("rhValue").textContent = rupiah(price);
+  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (cost > 0 ? " — Untung: " + rupiah(b.net - cost) : "");
+
+  fillBreakdown(b);
+  fillProfit(b.net, cost);
+  showResult();
+}
+
+// ============================================================
+//  Target Dana Cair — TikTok
+// ============================================================
+function renderTiktokTargetNet() {
+  const target = parseNum($("ttTnTarget").value);
+  const cost = parseNum($("ttTnCost").value);
+  if (target <= 0) { alert("Masukkan target dana cair."); return; }
+
+  const f = getTTFees();
+  const totalRate = f.komisi + f.dinamis;
+  const fixedTotal = f.proses + f.logistik;
+  let price = Math.ceil((target + fixedTotal) / (1 - totalRate));
+
+  // Iterate up until net >= target
+  for (let i = 0; i < 200; i++) {
+    const b = ttBreakdown(price);
+    if (b.net >= target) break;
+    price++;
+  }
+
+  const b = ttBreakdown(price);
+
+  setTTLabels();
+  $("resultHero").className = "result-hero pricing";
+  $("rhLabel").textContent = "Harga Jual untuk Target Dana Cair (TikTok)";
+  $("rhValue").textContent = rupiah(price);
+  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (cost > 0 ? " — Untung: " + rupiah(b.net - cost) : "");
+
+  fillTTBreakdown(b);
+  fillProfit(b.net, cost);
+  showResult();
+}
+
 // Events
 function setMode(m) {
   mode = m;
@@ -240,8 +310,10 @@ function updatePanels() {
   const isTT = platform === "tiktok";
   $("earningPanel").hidden = !(platform === "shopee" && mode === "earning");
   $("pricingPanel").hidden = !(platform === "shopee" && mode === "pricing");
+  $("targetNetPanel").hidden = !(platform === "shopee" && mode === "targetNet");
   $("tiktokEarningPanel").hidden = !(platform === "tiktok" && mode === "earning");
   $("tiktokPricingPanel").hidden = !(platform === "tiktok" && mode === "pricing");
+  $("tiktokTargetNetPanel").hidden = !(platform === "tiktok" && mode === "targetNet");
   $("shopeeFeeSettings").hidden = isTT;
   $("ttFeeSettings").hidden = !isTT;
   resetResult();
@@ -268,8 +340,10 @@ $("calcBtn").addEventListener("click", () => {
   switch (active) {
     case "earning": setShopeeLabels(); renderEarning(); break;
     case "pricing": setShopeeLabels(); renderPricing(); break;
+    case "targetNet": renderTargetNet(); break;
     case "tiktokEarning": renderTiktokEarning(); break;
     case "tiktokPricing": renderTiktokPricing(); break;
+    case "tiktokTargetNet": renderTiktokTargetNet(); break;
   }
 });
 

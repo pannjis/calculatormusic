@@ -43,6 +43,7 @@
           <select id="modeSelect" class="mode-select">
             <option value="earning">Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
             <option value="pricing">Tentukan Harga Jual — Modal &rarr; Harga aman</option>
+            <option value="targetNet">Target Dana Cair — Modal + Target &rarr; Harga jual</option>
           </select>
           <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
@@ -117,6 +118,42 @@
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
               <input type="text" inputmode="numeric" id="ttTargetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE: SHOPEE TARGET DANA CAIR -->
+        <div class="mode-panel" id="targetNetPanel" hidden>
+          <div class="form-group">
+            <label for="tnCost">Harga Modal / HPP <span class="opt">(opsional)</span></label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="tnCost" placeholder="Masukkan harga modal" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tnTarget">Target Dana Cair yang Diinginkan</label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="tnTarget" placeholder="Masukkan target dana cair" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE: TIKTOK TARGET DANA CAIR -->
+        <div class="mode-panel" id="tiktokTargetNetPanel" hidden>
+          <div class="form-group">
+            <label for="ttTnCost">Harga Modal / HPP <span class="opt">(opsional)</span></label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="ttTnCost" placeholder="Masukkan harga modal" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ttTnTarget">Target Dana Cair yang Diinginkan</label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="ttTnTarget" placeholder="Masukkan target dana cair" autocomplete="off" />
             </div>
           </div>
         </div>
