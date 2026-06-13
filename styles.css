@@ -96,7 +96,7 @@ body {
 }
 .platform-tab.active { background: var(--card); color: var(--primary); border-bottom-color: var(--primary); }
 .platform-tab:hover:not(.active) { background: var(--card); }
-.platform-logo { width: 20px; height: 20px; flex-shrink: 0; }
+.platform-logo { width: 20px; height: 20px; flex-shrink: 0; object-fit: contain; }
 
 /* HEADER / DROPDOWN */
 .calc-header { padding: 20px 28px; border-bottom: 1px solid var(--border); }
