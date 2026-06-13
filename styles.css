@@ -127,23 +127,28 @@ body {
 .btn-add:hover { border-color: var(--primary); background: var(--primary-light); }
 .btn-add-icon { width: 14px; height: 14px; }
 .extra-cost-row {
-  display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px;
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 12px; padding: 14px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg); position: relative;
 }
-.extra-cost-row input[type="text"] {
-  flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
-  padding: 10px 12px; font-size: .85rem; font-family: inherit;
-  font-weight: 500; min-width: 0; transition: border-color .15s;
+.extra-cost-row input.extra-name {
+  border: none; background: transparent;
+  padding: 0; font-size: .84rem; font-family: inherit;
+  font-weight: 600; color: var(--text); outline: none;
 }
-.extra-cost-row input[type="text"]:focus { border-color: var(--primary); outline: none; }
-.extra-cost-row .input-wrap { flex: 1; }
+.extra-cost-row input.extra-name::placeholder { color: var(--text-muted); font-weight: 500; }
+.extra-cost-row .input-wrap { border-radius: 8px; }
+.extra-cost-row .input-wrap input { padding: 10px 12px; font-size: .88rem; }
 .btn-remove {
+  position: absolute; top: 10px; right: 10px;
   display: flex; align-items: center; justify-content: center;
-  width: 36px; border: 1.5px solid var(--border); border-radius: 8px;
-  background: var(--bg); cursor: pointer; color: var(--danger);
-  transition: all .15s; flex-shrink: 0;
+  width: 28px; height: 28px; border: none; border-radius: 6px;
+  background: transparent; cursor: pointer; color: var(--text-muted);
+  transition: all .15s;
 }
-.btn-remove:hover { border-color: var(--danger); background: #fef2f2; }
-.btn-remove svg { width: 16px; height: 16px; }
+.btn-remove:hover { background: #fef2f2; color: var(--danger); }
+.btn-remove svg { width: 14px; height: 14px; }
 
 /* FEE SETTINGS */
 .fee-settings { border: 1.5px solid var(--border); border-radius: var(--radius-sm); margin-top: 8px; margin-bottom: 24px; }
