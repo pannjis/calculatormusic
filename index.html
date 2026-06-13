@@ -3,133 +3,89 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Kalkulator biaya admin Shopee: hitung harga jual aman, dana cair, dan target profit." />
-  <title>Shopee Fee Calculator — Harga Jual, Dana Cair & Profit</title>
+  <meta name="description" content="Kalkulator biaya admin Shopee: hitung dana cair dan tentukan harga jual aman." />
+  <title>Kalkulator Biaya Shopee</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- ===== NAV ===== -->
+
   <nav class="nav">
     <div class="wrap nav-inner">
       <div class="nav-brand">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
         <span class="nav-title">Shopee Calculator</span>
       </div>
-      <a href="https://github.com/pannjis/calculatormusic" target="_blank" rel="noopener" class="nav-link">
-        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.605-.015 2.896-.015 3.286 0 .315.21.694.825.576C20.565 21.795 24 17.295 24 12 24 5.37 18.63 0 12 0z"/></svg>
-        <span>GitHub</span>
-      </a>
     </div>
   </nav>
 
-  <!-- ===== HERO ===== -->
   <header class="hero-section">
     <div class="wrap">
       <h1>Kalkulator Biaya Admin Shopee</h1>
-      <p class="hero-sub">Hitung harga jual aman, estimasi dana cair, atau tentukan harga berdasarkan target profit — sudah termasuk potongan biaya Shopee.</p>
+      <p class="hero-sub">Hitung estimasi dana cair atau tentukan harga jual aman setelah potongan biaya Shopee.</p>
     </div>
   </header>
 
-  <!-- ===== MAIN ===== -->
   <main class="wrap main">
+    <!-- CALCULATOR -->
     <div class="calculator">
-
-      <!-- Tab switcher — 3 tabs -->
       <div class="calc-tabs">
-        <button class="calc-tab active" data-mode="safePrice" type="button">
-          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span class="calc-tab-text">
-            <strong>Harga Jual Aman</strong>
-            <small>Modal + Margin → Harga</small>
-          </span>
-        </button>
-        <button class="calc-tab" data-mode="netCash" type="button">
+        <button class="calc-tab active" data-mode="earning" type="button">
           <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
           <span class="calc-tab-text">
-            <strong>Dana Cair</strong>
-            <small>Harga Jual → Dana Diterima</small>
+            <strong>Hitung Penghasilan</strong>
+            <small>Harga jual &rarr; Dana cair</small>
           </span>
         </button>
-        <button class="calc-tab" data-mode="targetProfit" type="button">
-          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        <button class="calc-tab" data-mode="pricing" type="button">
+          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
           <span class="calc-tab-text">
-            <strong>Target Profit</strong>
-            <small>Modal + Profit Rp → Harga</small>
+            <strong>Tentukan Harga Jual</strong>
+            <small>Modal &rarr; Harga aman</small>
           </span>
         </button>
       </div>
 
       <div class="calc-body">
-        <!-- ===== MODE: HARGA JUAL AMAN ===== -->
-        <div class="mode-panel" id="safePricePanel">
-          <div class="mode-desc">
-            <span class="mode-desc-icon">🏷️</span>
-            <p>Masukkan harga modal dan margin keuntungan yang kamu inginkan. Kalkulator akan menghitung <strong>harga jual aman</strong> yang sudah memperhitungkan potongan biaya Shopee.</p>
-          </div>
+        <!-- MODE: HITUNG PENGHASILAN -->
+        <div class="mode-panel" id="earningPanel">
           <div class="form-group">
-            <label for="spCost">Harga Modal / HPP</label>
+            <label for="sellPrice">Harga Jual di Shopee</label>
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="spCost" placeholder="Masukkan harga modal" autocomplete="off" />
+              <input type="text" inputmode="numeric" id="sellPrice" placeholder="Masukkan harga jual" autocomplete="off" />
             </div>
           </div>
           <div class="form-group">
-            <label for="spMargin">Margin Keuntungan</label>
+            <label for="costPrice">Harga Modal / HPP <span class="opt">(opsional)</span></label>
             <div class="input-wrap">
-              <input type="number" id="spMargin" placeholder="Masukkan margin" step="0.1" min="0" autocomplete="off" />
-              <span class="input-suffix-lg">%</span>
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="costPrice" placeholder="Masukkan harga modal" autocomplete="off" />
             </div>
           </div>
         </div>
 
-        <!-- ===== MODE: DANA CAIR ===== -->
-        <div class="mode-panel" id="netCashPanel" hidden>
-          <div class="mode-desc">
-            <span class="mode-desc-icon">💰</span>
-            <p>Masukkan harga jual produk di Shopee. Kalkulator akan menghitung <strong>berapa dana yang kamu terima</strong> setelah semua potongan biaya.</p>
-          </div>
+        <!-- MODE: TENTUKAN HARGA JUAL -->
+        <div class="mode-panel" id="pricingPanel" hidden>
           <div class="form-group">
-            <label for="ncPrice">Harga Jual di Shopee</label>
+            <label for="costPrice2">Harga Modal / HPP</label>
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="ncPrice" placeholder="Masukkan harga jual" autocomplete="off" />
+              <input type="text" inputmode="numeric" id="costPrice2" placeholder="Masukkan harga modal" autocomplete="off" />
             </div>
           </div>
           <div class="form-group">
-            <label for="ncCost">Harga Modal / HPP <span class="opt">(opsional — untuk hitung profit)</span></label>
+            <label for="targetValue">Target Keuntungan <span class="opt">(isi 0 jika hanya balik modal)</span></label>
             <div class="input-wrap">
               <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="ncCost" placeholder="Masukkan harga modal" autocomplete="off" />
+              <input type="text" inputmode="numeric" id="targetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
             </div>
           </div>
         </div>
 
-        <!-- ===== MODE: TARGET PROFIT ===== -->
-        <div class="mode-panel" id="targetProfitPanel" hidden>
-          <div class="mode-desc">
-            <span class="mode-desc-icon">🎯</span>
-            <p>Masukkan harga modal dan jumlah keuntungan bersih yang kamu inginkan. Kalkulator akan menghitung <strong>harga jual yang diperlukan</strong> untuk mencapai target profit tersebut.</p>
-          </div>
-          <div class="form-group">
-            <label for="tpCost">Harga Modal / HPP</label>
-            <div class="input-wrap">
-              <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="tpCost" placeholder="Masukkan harga modal" autocomplete="off" />
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="tpProfit">Target Profit Bersih</label>
-            <div class="input-wrap">
-              <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="tpProfit" placeholder="Masukkan target keuntungan" autocomplete="off" />
-            </div>
-          </div>
-        </div>
-
-        <!-- ===== SETTINGS ===== -->
+        <!-- SETTINGS -->
         <details class="fee-settings">
           <summary>
             <svg class="fee-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1.08-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1.08 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1.08z"/></svg>
@@ -181,86 +137,49 @@
         </details>
 
         <button id="calcBtn" class="btn-calc" type="button">
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="10" y2="10"/><line x1="12" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="10" y2="14"/><line x1="12" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="10" y2="18"/><line x1="12" y1="18" x2="16" y2="18"/></svg>
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
           Hitung Sekarang
         </button>
       </div>
     </div>
 
-    <!-- ===== RESULT ===== -->
+    <!-- RESULT -->
     <div class="result-wrapper" id="resultWrapper">
       <div class="result-card">
-        <!-- Empty state -->
         <div class="result-empty" id="emptyState">
           <svg class="result-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
           <h3>Hasil akan muncul di sini</h3>
-          <p>Masukkan data lalu klik <strong>Hitung Sekarang</strong></p>
+          <p>Masukkan data lalu klik Hitung Sekarang</p>
         </div>
 
-        <!-- Filled state -->
         <div id="resultContent" hidden>
           <div class="result-hero" id="resultHero">
-            <span class="rh-label" id="rhLabel">Harga Jual Aman</span>
+            <span class="rh-label" id="rhLabel">Estimasi Dana Cair</span>
             <span class="rh-value" id="rhValue">Rp0</span>
             <span class="rh-note" id="rhNote"></span>
           </div>
 
           <div class="breakdown">
             <div class="bd-section">
-              <div class="bd-row bd-head">
-                <span>Subtotal Pesanan</span>
-                <span id="rSubtotal">Rp0</span>
-              </div>
-              <div class="bd-row bd-sub">
-                <span>Harga Produk</span>
-                <span id="rProduct">Rp0</span>
-              </div>
+              <div class="bd-row bd-head"><span>Subtotal Pesanan</span><span id="rSubtotal">Rp0</span></div>
+              <div class="bd-row bd-sub"><span>Harga Produk</span><span id="rProduct">Rp0</span></div>
             </div>
-
             <div class="bd-section">
-              <div class="bd-row bd-head negative">
-                <span>Total Biaya</span>
-                <span id="rFeesTotal">-Rp0</span>
-              </div>
-              <div class="bd-row bd-sub">
-                <span>Biaya Administrasi</span>
-                <span id="rAdmin">-Rp0</span>
-              </div>
-              <div class="bd-row bd-sub">
-                <span>Premi</span>
-                <span id="rPremi">-Rp0</span>
-              </div>
-              <div class="bd-row bd-sub">
-                <span>Biaya Layanan</span>
-                <span id="rService">-Rp0</span>
-              </div>
-              <div class="bd-row bd-sub" id="rowFixed" hidden>
-                <span>Biaya Tetap</span>
-                <span id="rFixed">-Rp0</span>
-              </div>
+              <div class="bd-row bd-head negative"><span>Total Biaya</span><span id="rFeesTotal">-Rp0</span></div>
+              <div class="bd-row bd-sub"><span>Biaya Administrasi</span><span id="rAdmin">-Rp0</span></div>
+              <div class="bd-row bd-sub"><span>Premi</span><span id="rPremi">-Rp0</span></div>
+              <div class="bd-row bd-sub"><span>Biaya Layanan</span><span id="rService">-Rp0</span></div>
+              <div class="bd-row bd-sub" id="rowFixed" hidden><span>Biaya Tetap</span><span id="rFixed">-Rp0</span></div>
             </div>
-
             <div class="bd-section bd-total-section">
-              <div class="bd-row bd-total">
-                <span>Dana Cair</span>
-                <span id="rNet">Rp0</span>
-              </div>
+              <div class="bd-row bd-total"><span>Dana Cair</span><span id="rNet">Rp0</span></div>
             </div>
           </div>
 
           <div class="stats" id="profitPanel" hidden>
-            <div class="stat-card">
-              <span class="stat-label">Modal</span>
-              <span class="stat-value" id="rCost">Rp0</span>
-            </div>
-            <div class="stat-card" id="profitCell">
-              <span class="stat-label">Keuntungan</span>
-              <span class="stat-value" id="rProfit">Rp0</span>
-            </div>
-            <div class="stat-card">
-              <span class="stat-label">Margin</span>
-              <span class="stat-value" id="rMargin">0%</span>
-            </div>
+            <div class="stat-card"><span class="stat-label">Modal</span><span class="stat-value" id="rCost">Rp0</span></div>
+            <div class="stat-card" id="profitCell"><span class="stat-label">Keuntungan</span><span class="stat-value" id="rProfit">Rp0</span></div>
+            <div class="stat-card"><span class="stat-label">Margin</span><span class="stat-value" id="rMargin">0%</span></div>
           </div>
 
           <p class="result-disclaimer">*Estimasi. Biaya aktual mengikuti tarif & program di akun Shopee kamu.</p>
@@ -270,9 +189,7 @@
   </main>
 
   <footer class="foot">
-    <div class="wrap">
-      <p>Dibuat untuk membantu seller Shopee. Bukan afiliasi resmi Shopee.</p>
-    </div>
+    <div class="wrap"><p>Dibuat untuk membantu seller. Bukan afiliasi resmi Shopee.</p></div>
   </footer>
 
   <script src="script.js"></script>
