@@ -92,9 +92,11 @@ body {
   color: var(--text-muted); cursor: pointer; text-align: center;
   transition: background .15s, color .15s;
   border-bottom: 3px solid transparent;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .platform-tab.active { background: var(--card); color: var(--primary); border-bottom-color: var(--primary); }
 .platform-tab:hover:not(.active) { background: var(--card); }
+.platform-logo { width: 20px; height: 20px; flex-shrink: 0; }
 
 /* HEADER / DROPDOWN */
 .calc-header { padding: 20px 28px; border-bottom: 1px solid var(--border); }
