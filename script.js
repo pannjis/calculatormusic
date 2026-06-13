@@ -146,18 +146,19 @@ function renderPricing() {
   const profit = parseNum($("targetValue").value);
   if (cost <= 0) { alert("Masukkan harga modal."); return; }
 
+  const extra = getTotalExtraCosts();
   const f = getFees();
   const k = 1 - (f.admin + f.premi + f.service);
-  const rawPrice = (cost + profit + f.fixed) / k;
+  // Harga jual harus cover: modal + target untung + biaya tambahan + biaya tetap platform
+  const rawPrice = (cost + profit + extra + f.fixed) / k;
   const rounded = Math.ceil(rawPrice / 100) * 100;
   const b = breakdown(rounded);
+  const netAfterExtra = b.net - extra;
 
   $("resultHero").className = "result-hero pricing";
   $("rhLabel").textContent = "Harga Jual Aman";
   $("rhValue").textContent = rupiah(rounded);
-  $("rhNote").textContent = profit > 0
-    ? "Dana cair: " + rupiah(b.net) + " — Untung: " + rupiah(b.net - cost)
-    : "Dana cair: " + rupiah(b.net) + " — Balik modal aman";
+  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (extra > 0 ? " — Setelah biaya tambahan: " + rupiah(netAfterExtra) : "") + " — Untung: " + rupiah(netAfterExtra - cost);
 
   fillBreakdown(b);
   fillProfit(b.net, cost);
@@ -225,21 +226,21 @@ function renderTiktokPricing() {
   const profit = parseNum($("ttTargetValue").value);
   if (cost <= 0) { alert("Masukkan harga modal."); return; }
 
+  const extra = getTotalExtraCosts();
   const f = getTTFees();
   const k = 1 - (f.komisi + f.dinamis);
   const fixedTotal = f.proses + f.logistik;
-  const rawPrice = (cost + profit + fixedTotal) / k;
+  const rawPrice = (cost + profit + extra + fixedTotal) / k;
   const rounded = Math.ceil(rawPrice / 100) * 100;
   const b = ttBreakdown(rounded);
+  const netAfterExtra = b.net - extra;
 
   setTTLabels();
 
   $("resultHero").className = "result-hero pricing";
   $("rhLabel").textContent = "Harga Jual Aman (TikTok)";
   $("rhValue").textContent = rupiah(rounded);
-  $("rhNote").textContent = profit > 0
-    ? "Dana cair: " + rupiah(b.net) + " — Untung: " + rupiah(b.net - cost)
-    : "Dana cair: " + rupiah(b.net) + " — Balik modal aman";
+  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (extra > 0 ? " — Setelah biaya tambahan: " + rupiah(netAfterExtra) : "") + " — Untung: " + rupiah(netAfterExtra - cost);
 
   fillTTBreakdown(b);
   fillProfit(b.net, cost);
@@ -272,17 +273,18 @@ function renderTargetNet() {
   const cost = parseNum($("tnCost").value);
   if (target <= 0) { alert("Masukkan target dana cair."); return; }
 
-  // net = price - floor(price*admin) - ceil(price*premi) - ceil(price*service) - fixed
-  // Approx: net ≈ price * (1 - totalRate) - fixed
-  // So price ≈ (target + fixed) / (1 - totalRate), then iterate to exact
+  const extra = getTotalExtraCosts();
+  // Target dana cair = dana dari platform - biaya tambahan
+  // Jadi dana platform yang dibutuhkan = target + biaya tambahan
+  const netNeeded = target + extra;
+
   const f = getFees();
   const totalRate = f.admin + f.premi + f.service;
-  let price = Math.ceil((target + f.fixed) / (1 - totalRate));
+  let price = Math.ceil((netNeeded + f.fixed) / (1 - totalRate));
 
-  // Iterate up until net >= target
   for (let i = 0; i < 200; i++) {
     const b = breakdown(price);
-    if (b.net >= target) break;
+    if (b.net >= netNeeded) break;
     price++;
   }
 
@@ -292,7 +294,7 @@ function renderTargetNet() {
   $("resultHero").className = "result-hero pricing";
   $("rhLabel").textContent = "Harga Jual untuk Target Dana Cair";
   $("rhValue").textContent = rupiah(price);
-  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (cost > 0 ? " — Untung: " + rupiah(b.net - cost) : "");
+  $("rhNote").textContent = "Dana platform: " + rupiah(b.net) + (extra > 0 ? " — Biaya tambahan: " + rupiah(extra) : "") + " — Dana bersih: " + rupiah(b.net - extra);
 
   fillBreakdown(b);
   fillProfit(b.net, cost);
@@ -307,15 +309,17 @@ function renderTiktokTargetNet() {
   const cost = parseNum($("ttTnCost").value);
   if (target <= 0) { alert("Masukkan target dana cair."); return; }
 
+  const extra = getTotalExtraCosts();
+  const netNeeded = target + extra;
+
   const f = getTTFees();
   const totalRate = f.komisi + f.dinamis;
   const fixedTotal = f.proses + f.logistik;
-  let price = Math.ceil((target + fixedTotal) / (1 - totalRate));
+  let price = Math.ceil((netNeeded + fixedTotal) / (1 - totalRate));
 
-  // Iterate up until net >= target
   for (let i = 0; i < 200; i++) {
     const b = ttBreakdown(price);
-    if (b.net >= target) break;
+    if (b.net >= netNeeded) break;
     price++;
   }
 
@@ -325,7 +329,7 @@ function renderTiktokTargetNet() {
   $("resultHero").className = "result-hero pricing";
   $("rhLabel").textContent = "Harga Jual untuk Target Dana Cair (TikTok)";
   $("rhValue").textContent = rupiah(price);
-  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (cost > 0 ? " — Untung: " + rupiah(b.net - cost) : "");
+  $("rhNote").textContent = "Dana platform: " + rupiah(b.net) + (extra > 0 ? " — Biaya tambahan: " + rupiah(extra) : "") + " — Dana bersih: " + rupiah(b.net - extra);
 
   fillTTBreakdown(b);
   fillProfit(b.net, cost);
