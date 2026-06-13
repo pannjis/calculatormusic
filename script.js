@@ -26,7 +26,7 @@ function attachFormat(el) {
     el.value = raw ? raw.toLocaleString("id-ID") : "";
   });
 }
-["sellPrice", "costPrice", "costPrice2", "targetValue"].forEach((id) => attachFormat($(id)));
+["sellPrice", "costPrice", "costPrice2", "targetValue", "ttSellPrice", "ttCostPrice", "ttCostPrice2", "ttTargetValue"].forEach((id) => attachFormat($(id)));
 
 // Core
 function getFees() {
@@ -120,11 +120,114 @@ function renderPricing() {
   showResult();
 }
 
+// ============================================================
+//  TikTok Shop
+// ============================================================
+function getTTFees() {
+  return {
+    komisi: parseFloat($("ttKomisiRate").value) / 100 || 0,
+    dinamis: parseFloat($("ttDinamisRate").value) / 100 || 0,
+    proses: parseInt($("ttProsesFixed").value) || 0,
+    logistik: parseInt($("ttLogistikFixed").value) || 0,
+  };
+}
+
+function ttBreakdown(price) {
+  const f = getTTFees();
+  const komisi = price * f.komisi;
+  const dinamis = price * f.dinamis;
+  const proses = f.proses;
+  const logistik = f.logistik;
+  const total = komisi + dinamis + proses + logistik;
+  return { price, komisi, dinamis, proses, logistik, total, net: price - total };
+}
+
+function fillTTBreakdown(b) {
+  $("rSubtotal").textContent = rupiah(b.price);
+  $("rProduct").textContent = rupiah(b.price);
+  $("rAdmin").textContent = "-" + rupiah(b.komisi);
+  $("rPremi").textContent = "-" + rupiah(b.dinamis);
+  $("rService").textContent = "-" + rupiah(b.proses);
+  $("rFeesTotal").textContent = "-" + rupiah(b.total);
+  $("rNet").textContent = rupiah(b.net);
+  // Reuse rowFixed for logistik
+  $("rowFixed").hidden = false;
+  $("rFixed").textContent = "-" + rupiah(b.logistik);
+}
+
+function renderTiktokEarning() {
+  const price = parseNum($("ttSellPrice").value);
+  if (price <= 0) { alert("Masukkan harga jual."); return; }
+  const cost = parseNum($("ttCostPrice").value);
+  const b = ttBreakdown(price);
+
+  // Relabel breakdown rows for TikTok
+  setTTLabels();
+
+  $("resultHero").className = "result-hero";
+  $("rhLabel").textContent = "Estimasi Dana Cair (TikTok)";
+  $("rhValue").textContent = rupiah(b.net);
+  $("rhNote").textContent = "Dari harga jual " + rupiah(price);
+
+  fillTTBreakdown(b);
+  fillProfit(b.net, cost);
+  showResult();
+}
+
+function renderTiktokPricing() {
+  const cost = parseNum($("ttCostPrice2").value);
+  const profit = parseNum($("ttTargetValue").value);
+  if (cost <= 0) { alert("Masukkan harga modal."); return; }
+
+  const f = getTTFees();
+  const k = 1 - (f.komisi + f.dinamis);
+  const fixedTotal = f.proses + f.logistik;
+  const rawPrice = (cost + profit + fixedTotal) / k;
+  const rounded = Math.ceil(rawPrice / 100) * 100;
+  const b = ttBreakdown(rounded);
+
+  setTTLabels();
+
+  $("resultHero").className = "result-hero pricing";
+  $("rhLabel").textContent = "Harga Jual Aman (TikTok)";
+  $("rhValue").textContent = rupiah(rounded);
+  $("rhNote").textContent = profit > 0
+    ? "Dana cair: " + rupiah(b.net) + " — Untung: " + rupiah(b.net - cost)
+    : "Dana cair: " + rupiah(b.net) + " — Balik modal aman";
+
+  fillTTBreakdown(b);
+  fillProfit(b.net, cost);
+  showResult();
+}
+
+// Labels for breakdown rows
+const defaultLabels = { admin: "Biaya Administrasi", premi: "Premi", service: "Biaya Layanan", fixed: "Biaya Tetap" };
+const ttLabels = { admin: "Komisi Platform", premi: "Komisi Dinamis", service: "Biaya Pemrosesan", fixed: "Biaya Logistik" };
+
+function setShopeeLabels() {
+  document.querySelector('[id="rAdmin"]').parentElement.querySelector("span:first-child").textContent = defaultLabels.admin;
+  document.querySelector('[id="rPremi"]').parentElement.querySelector("span:first-child").textContent = defaultLabels.premi;
+  document.querySelector('[id="rService"]').parentElement.querySelector("span:first-child").textContent = defaultLabels.service;
+  document.querySelector('[id="rFixed"]').parentElement.querySelector("span:first-child").textContent = defaultLabels.fixed;
+}
+
+function setTTLabels() {
+  document.querySelector('[id="rAdmin"]').parentElement.querySelector("span:first-child").textContent = ttLabels.admin;
+  document.querySelector('[id="rPremi"]').parentElement.querySelector("span:first-child").textContent = ttLabels.premi;
+  document.querySelector('[id="rService"]').parentElement.querySelector("span:first-child").textContent = ttLabels.service;
+  document.querySelector('[id="rFixed"]').parentElement.querySelector("span:first-child").textContent = ttLabels.fixed;
+}
+
 // Events
 function setMode(m) {
   mode = m;
+  const isTT = m.startsWith("tiktok");
   $("earningPanel").hidden = m !== "earning";
   $("pricingPanel").hidden = m !== "pricing";
+  $("tiktokEarningPanel").hidden = m !== "tiktokEarning";
+  $("tiktokPricingPanel").hidden = m !== "tiktokPricing";
+  $("shopeeFeeSettings").hidden = isTT;
+  $("ttFeeSettings").hidden = !isTT;
   resetResult();
 }
 
@@ -143,7 +246,14 @@ $("presetSelect").addEventListener("change", (e) => {
   $(id).addEventListener("input", () => { $("presetSelect").value = "custom"; });
 });
 
-$("calcBtn").addEventListener("click", () => { mode === "earning" ? renderEarning() : renderPricing(); });
+$("calcBtn").addEventListener("click", () => {
+  switch (mode) {
+    case "earning": setShopeeLabels(); renderEarning(); break;
+    case "pricing": setShopeeLabels(); renderPricing(); break;
+    case "tiktokEarning": renderTiktokEarning(); break;
+    case "tiktokPricing": renderTiktokPricing(); break;
+  }
+});
 
 document.querySelectorAll('input[type="text"]').forEach((inp) => {
   inp.addEventListener("keydown", (e) => { if (e.key === "Enter") $("calcBtn").click(); });

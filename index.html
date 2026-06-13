@@ -35,8 +35,10 @@
         <label for="modeSelect" class="calc-header-label">Pilih Kalkulator</label>
         <div class="select-wrap">
           <select id="modeSelect" class="mode-select">
-            <option value="earning">Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
-            <option value="pricing">Tentukan Harga Jual — Modal &rarr; Harga aman</option>
+            <option value="earning">Shopee: Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
+            <option value="pricing">Shopee: Tentukan Harga Jual — Modal &rarr; Harga aman</option>
+            <option value="tiktokEarning">TikTok Shop: Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
+            <option value="tiktokPricing">TikTok Shop: Tentukan Harga Jual — Modal &rarr; Harga aman</option>
           </select>
           <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
@@ -79,8 +81,88 @@
           </div>
         </div>
 
-        <!-- SETTINGS -->
-        <details class="fee-settings">
+        <!-- MODE: TIKTOK HITUNG PENGHASILAN -->
+        <div class="mode-panel" id="tiktokEarningPanel" hidden>
+          <div class="form-group">
+            <label for="ttSellPrice">Harga Jual di TikTok Shop</label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="ttSellPrice" placeholder="Masukkan harga jual" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ttCostPrice">Harga Modal / HPP <span class="opt">(opsional)</span></label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="ttCostPrice" placeholder="Masukkan harga modal" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE: TIKTOK TENTUKAN HARGA JUAL -->
+        <div class="mode-panel" id="tiktokPricingPanel" hidden>
+          <div class="form-group">
+            <label for="ttCostPrice2">Harga Modal / HPP</label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="ttCostPrice2" placeholder="Masukkan harga modal" autocomplete="off" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="ttTargetValue">Target Keuntungan <span class="opt">(isi 0 jika hanya balik modal)</span></label>
+            <div class="input-wrap">
+              <span class="input-prefix">Rp</span>
+              <input type="text" inputmode="numeric" id="ttTargetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
+            </div>
+          </div>
+        </div>
+
+        <!-- TikTok Fee Settings -->
+        <details class="fee-settings" id="ttFeeSettings" hidden>
+          <summary>
+            <svg class="fee-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1.08-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1.08 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1.08z"/></svg>
+            <span>Pengaturan Biaya TikTok Shop</span>
+            <svg class="fee-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <div class="fee-body">
+            <div class="fee-top">
+              <span class="fee-info">Sesuaikan dengan tarif di TikTok Seller Center kamu.</span>
+            </div>
+            <div class="fee-grid">
+              <div class="form-group">
+                <label for="ttKomisiRate">Komisi Platform</label>
+                <div class="input-wrap-sm">
+                  <input type="number" id="ttKomisiRate" value="9.5" step="0.01" min="0" />
+                  <span class="input-suffix">%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="ttDinamisRate">Komisi Dinamis</label>
+                <div class="input-wrap-sm">
+                  <input type="number" id="ttDinamisRate" value="8" step="0.01" min="0" />
+                  <span class="input-suffix">%</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="ttProsesFixed">Biaya Pemrosesan</label>
+                <div class="input-wrap-sm">
+                  <input type="number" id="ttProsesFixed" value="1250" step="50" min="0" />
+                  <span class="input-suffix">Rp</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="ttLogistikFixed">Biaya Logistik</label>
+                <div class="input-wrap-sm">
+                  <input type="number" id="ttLogistikFixed" value="990" step="50" min="0" />
+                  <span class="input-suffix">Rp</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- SETTINGS (Shopee) -->
+        <details class="fee-settings" id="shopeeFeeSettings">
           <summary>
             <svg class="fee-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09a1.65 1.65 0 00-1.08-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09a1.65 1.65 0 001.51-1.08 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1.08z"/></svg>
             <span>Pengaturan Persentase Biaya</span>
