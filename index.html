@@ -31,14 +31,18 @@
   <main class="wrap main">
     <!-- CALCULATOR -->
     <div class="calculator">
+      <!-- Platform tabs -->
+      <div class="platform-tabs">
+        <button class="platform-tab active" data-platform="shopee" type="button">Shopee</button>
+        <button class="platform-tab" data-platform="tiktok" type="button">TikTok Shop</button>
+      </div>
+
       <div class="calc-header">
         <label for="modeSelect" class="calc-header-label">Pilih Kalkulator</label>
         <div class="select-wrap">
           <select id="modeSelect" class="mode-select">
-            <option value="earning">Shopee: Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
-            <option value="pricing">Shopee: Tentukan Harga Jual — Modal &rarr; Harga aman</option>
-            <option value="tiktokEarning">TikTok Shop: Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
-            <option value="tiktokPricing">TikTok Shop: Tentukan Harga Jual — Modal &rarr; Harga aman</option>
+            <option value="earning">Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
+            <option value="pricing">Tentukan Harga Jual — Modal &rarr; Harga aman</option>
           </select>
           <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>

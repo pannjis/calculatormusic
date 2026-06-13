@@ -17,6 +17,7 @@ const parseNum = (str) => {
 const pct = (id) => { const v = parseFloat($(id).value); return isNaN(v) ? 0 : v / 100; };
 
 let mode = "earning";
+let platform = "shopee";
 
 // Format ribuan
 function attachFormat(el) {
@@ -27,6 +28,11 @@ function attachFormat(el) {
   });
 }
 ["sellPrice", "costPrice", "costPrice2", "targetValue", "ttSellPrice", "ttCostPrice", "ttCostPrice2", "ttTargetValue"].forEach((id) => attachFormat($(id)));
+
+function getActiveMode() {
+  if (platform === "shopee") return mode;
+  return mode === "earning" ? "tiktokEarning" : "tiktokPricing";
+}
 
 // Core
 function getFees() {
@@ -221,16 +227,27 @@ function setTTLabels() {
 // Events
 function setMode(m) {
   mode = m;
-  const isTT = m.startsWith("tiktok");
-  $("earningPanel").hidden = m !== "earning";
-  $("pricingPanel").hidden = m !== "pricing";
-  $("tiktokEarningPanel").hidden = m !== "tiktokEarning";
-  $("tiktokPricingPanel").hidden = m !== "tiktokPricing";
+  updatePanels();
+}
+
+function setPlatform(p) {
+  platform = p;
+  document.querySelectorAll(".platform-tab").forEach((t) => t.classList.toggle("active", t.dataset.platform === p));
+  updatePanels();
+}
+
+function updatePanels() {
+  const isTT = platform === "tiktok";
+  $("earningPanel").hidden = !(platform === "shopee" && mode === "earning");
+  $("pricingPanel").hidden = !(platform === "shopee" && mode === "pricing");
+  $("tiktokEarningPanel").hidden = !(platform === "tiktok" && mode === "earning");
+  $("tiktokPricingPanel").hidden = !(platform === "tiktok" && mode === "pricing");
   $("shopeeFeeSettings").hidden = isTT;
   $("ttFeeSettings").hidden = !isTT;
   resetResult();
 }
 
+document.querySelectorAll(".platform-tab").forEach((t) => t.addEventListener("click", () => setPlatform(t.dataset.platform)));
 $("modeSelect").addEventListener("change", (e) => setMode(e.target.value));
 
 $("presetSelect").addEventListener("change", (e) => {
@@ -247,7 +264,8 @@ $("presetSelect").addEventListener("change", (e) => {
 });
 
 $("calcBtn").addEventListener("click", () => {
-  switch (mode) {
+  const active = getActiveMode();
+  switch (active) {
     case "earning": setShopeeLabels(); renderEarning(); break;
     case "pricing": setShopeeLabels(); renderPricing(); break;
     case "tiktokEarning": renderTiktokEarning(); break;

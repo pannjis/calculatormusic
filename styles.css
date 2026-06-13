@@ -60,6 +60,18 @@ body {
 /* CALCULATOR */
 .calculator { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-lg); overflow: hidden; }
 
+/* PLATFORM TABS */
+.platform-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.platform-tab {
+  flex: 1; padding: 14px 16px; border: none; background: var(--bg);
+  font-family: inherit; font-size: .88rem; font-weight: 700;
+  color: var(--text-muted); cursor: pointer; text-align: center;
+  transition: background .15s, color .15s;
+  border-bottom: 3px solid transparent;
+}
+.platform-tab.active { background: var(--card); color: var(--primary); border-bottom-color: var(--primary); }
+.platform-tab:hover:not(.active) { background: var(--card); }
+
 /* HEADER / DROPDOWN */
 .calc-header { padding: 20px 28px; border-bottom: 1px solid var(--border); }
 .calc-header-label { display: block; font-size: .76rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px; }
