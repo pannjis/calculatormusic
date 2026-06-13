@@ -79,9 +79,15 @@
           </div>
           <div class="form-group">
             <label for="targetValue">Target Keuntungan <span class="opt">(isi 0 jika hanya balik modal)</span></label>
-            <div class="input-wrap">
-              <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="targetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
+            <div class="input-toggle-wrap">
+              <div class="toggle-btns" id="profitToggle">
+                <button type="button" class="toggle-btn active" data-type="nominal">Rp</button>
+                <button type="button" class="toggle-btn" data-type="percent">%</button>
+              </div>
+              <div class="input-wrap">
+                <span class="input-prefix" id="profitPrefix">Rp</span>
+                <input type="text" inputmode="numeric" id="targetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
+              </div>
             </div>
           </div>
         </div>
@@ -115,9 +121,15 @@
           </div>
           <div class="form-group">
             <label for="ttTargetValue">Target Keuntungan <span class="opt">(isi 0 jika hanya balik modal)</span></label>
-            <div class="input-wrap">
-              <span class="input-prefix">Rp</span>
-              <input type="text" inputmode="numeric" id="ttTargetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
+            <div class="input-toggle-wrap">
+              <div class="toggle-btns" id="ttProfitToggle">
+                <button type="button" class="toggle-btn active" data-type="nominal">Rp</button>
+                <button type="button" class="toggle-btn" data-type="percent">%</button>
+              </div>
+              <div class="input-wrap">
+                <span class="input-prefix" id="ttProfitPrefix">Rp</span>
+                <input type="text" inputmode="numeric" id="ttTargetValue" placeholder="Masukkan target keuntungan" autocomplete="off" />
+              </div>
             </div>
           </div>
         </div>

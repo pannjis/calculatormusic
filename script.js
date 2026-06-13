@@ -18,6 +18,8 @@ const pct = (id) => { const v = parseFloat($(id).value); return isNaN(v) ? 0 : v
 
 let mode = "earning";
 let platform = "shopee";
+let profitType = "nominal"; // nominal | percent
+let ttProfitType = "nominal";
 
 // Format ribuan
 function attachFormat(el) {
@@ -66,6 +68,29 @@ function getTotalExtraCosts() {
 }
 
 $("addCostBtn").addEventListener("click", addExtraCost);
+
+// Toggle Rp / % for profit target
+document.querySelectorAll("#profitToggle .toggle-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#profitToggle .toggle-btn").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    profitType = btn.dataset.type;
+    $("profitPrefix").textContent = profitType === "nominal" ? "Rp" : "%";
+    $("targetValue").placeholder = profitType === "nominal" ? "Masukkan target keuntungan" : "Masukkan persentase margin";
+    $("targetValue").value = "";
+  });
+});
+
+document.querySelectorAll("#ttProfitToggle .toggle-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("#ttProfitToggle .toggle-btn").forEach((b) => b.classList.remove("active"));
+    btn.classList.add("active");
+    ttProfitType = btn.dataset.type;
+    $("ttProfitPrefix").textContent = ttProfitType === "nominal" ? "Rp" : "%";
+    $("ttTargetValue").placeholder = ttProfitType === "nominal" ? "Masukkan target keuntungan" : "Masukkan persentase margin";
+    $("ttTargetValue").value = "";
+  });
+});
 
 // Core
 function getFees() {
@@ -152,13 +177,15 @@ function renderEarning() {
 
 function renderPricing() {
   const cost = parseNum($("costPrice2").value);
-  const profit = parseNum($("targetValue").value);
+  const targetRaw = parseNum($("targetValue").value);
   if (cost <= 0) { alert("Masukkan harga modal."); return; }
+
+  // Convert target to nominal
+  const profit = profitType === "percent" ? Math.round(cost * targetRaw / 100) : targetRaw;
 
   const extra = getTotalExtraCosts();
   const f = getFees();
   const k = 1 - (f.admin + f.premi + f.service);
-  // Harga jual harus cover: modal + target untung + biaya tambahan + biaya tetap platform
   const rawPrice = (cost + profit + extra + f.fixed) / k;
   const rounded = Math.ceil(rawPrice / 100) * 100;
   const b = breakdown(rounded);
@@ -229,8 +256,10 @@ function renderTiktokEarning() {
 
 function renderTiktokPricing() {
   const cost = parseNum($("ttCostPrice2").value);
-  const profit = parseNum($("ttTargetValue").value);
+  const targetRaw = parseNum($("ttTargetValue").value);
   if (cost <= 0) { alert("Masukkan harga modal."); return; }
+
+  const profit = ttProfitType === "percent" ? Math.round(cost * targetRaw / 100) : targetRaw;
 
   const extra = getTotalExtraCosts();
   const f = getTTFees();

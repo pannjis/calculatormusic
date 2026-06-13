@@ -112,6 +112,17 @@ body {
 .input-wrap-sm input { flex: 1; border: none; outline: none; padding: 10px 12px; font-size: .88rem; font-family: inherit; font-weight: 500; min-width: 0; width: 100%; }
 .input-suffix { display: flex; align-items: center; padding: 0 12px; background: var(--bg); font-size: .8rem; font-weight: 700; color: var(--text-muted); border-left: 1.5px solid var(--border); white-space: nowrap; }
 
+/* INPUT TOGGLE (Rp / %) */
+.input-toggle-wrap { display: flex; flex-direction: column; gap: 8px; }
+.toggle-btns { display: flex; gap: 0; border: 1.5px solid var(--border); border-radius: 8px; overflow: hidden; width: fit-content; }
+.toggle-btn {
+  padding: 6px 14px; border: none; background: var(--bg);
+  font-family: inherit; font-size: .8rem; font-weight: 700;
+  color: var(--text-muted); cursor: pointer; transition: all .15s;
+}
+.toggle-btn.active { background: var(--primary); color: #fff; }
+.toggle-btn:not(:last-child) { border-right: 1.5px solid var(--border); }
+
 /* EXTRA COSTS */
 .extra-costs-section { margin-bottom: 22px; }
 .extra-costs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
