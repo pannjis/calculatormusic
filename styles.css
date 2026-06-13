@@ -129,7 +129,7 @@ body {
 
 /* RESULT */
 .result-wrapper { position: sticky; top: 70px; }
-.result-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+.result-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; border: 1.5px solid #fff; outline: 1.5px solid var(--border); }
 
 .result-empty { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 60px 24px; color: var(--text-muted); }
 .result-empty-icon { width: 48px; height: 48px; margin-bottom: 16px; opacity: .4; }
