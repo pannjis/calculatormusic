@@ -390,6 +390,7 @@ function setMode(m) {
 function setPlatform(p) {
   platform = p;
   document.querySelectorAll(".platform-tab").forEach((t) => t.classList.toggle("active", t.dataset.platform === p));
+  document.querySelector(".calculator").setAttribute("data-theme", p);
   updatePanels();
 }
 
