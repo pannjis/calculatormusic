@@ -199,7 +199,7 @@ body {
 .result-empty p { font-size: .82rem; }
 
 .result-hero { padding: 28px 24px; text-align: center; background: linear-gradient(135deg, #1e2a3a, #334155); color: #fff; }
-.result-hero.pricing { background: linear-gradient(135deg, var(--accent), #1d4ed8); }
+.result-hero.pricing { background: linear-gradient(135deg, #059669, #047857); }
 .rh-label { display: block; font-size: .82rem; opacity: .85; margin-bottom: 4px; }
 .rh-value { display: block; font-size: 2rem; font-weight: 900; letter-spacing: -.02em; }
 .rh-note { display: block; font-size: .76rem; opacity: .7; margin-top: 6px; }
