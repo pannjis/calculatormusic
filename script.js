@@ -136,7 +136,7 @@ function renderSafePrice() {
     return;
   }
 
-  const rounded = Math.ceil(rawPrice / 100) * 100;
+  const rounded = Math.ceil(rawPrice);
   const b = breakdown(rounded);
   const actualProfit = b.net - cost;
   const actualMargin = b.net > 0 ? (actualProfit / b.net) * 100 : 0;
@@ -201,7 +201,7 @@ function renderTargetProfit() {
     return;
   }
 
-  const rounded = Math.ceil(rawPrice / 100) * 100;
+  const rounded = Math.ceil(rawPrice);
   const b = breakdown(rounded);
   const actualProfit = b.net - cost;
   const actualMargin = b.net > 0 ? (actualProfit / b.net) * 100 : 0;

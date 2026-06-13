@@ -81,6 +81,10 @@ body {
   position: relative;
   z-index: 1;
   padding-bottom: 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: start;
 }
 
 /* ===== CALCULATOR CARD ===== */
@@ -89,7 +93,6 @@ body {
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
-  margin-bottom: 28px;
 }
 
 /* ===== TABS — 3 columns ===== */
@@ -309,7 +312,7 @@ body {
 .btn-icon { width: 20px; height: 20px; }
 
 /* ===== RESULT ===== */
-.result-wrapper { margin-top: 0; }
+.result-wrapper { position: sticky; top: 70px; }
 .result-card {
   background: var(--card);
   border-radius: var(--radius);
@@ -391,7 +394,7 @@ body {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .main { margin-top: -28px; }
+  .main { grid-template-columns: 1fr; margin-top: -28px; }
   .calc-body { padding: 24px 20px; }
   .calc-tab { padding: 14px 14px; gap: 10px; }
   .calc-tab-text strong { font-size: .78rem; }
