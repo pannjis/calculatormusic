@@ -62,7 +62,6 @@ body {
 .calculator { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-lg); overflow: hidden; }
 
 /* PLATFORM THEMES */
-.calculator[data-theme="shopee"] .platform-tab.active { color: #ee4d2d; border-bottom-color: #ee4d2d; }
 .calculator[data-theme="shopee"] .btn-calc { background: #ee4d2d; }
 .calculator[data-theme="shopee"] .btn-calc:hover { background: #d13a1c; }
 .calculator[data-theme="shopee"] .input-wrap:focus-within { border-color: #ee4d2d; box-shadow: 0 0 0 3px rgba(238,77,45,.1); }
@@ -73,7 +72,6 @@ body {
 .calculator[data-theme="shopee"] .btn-add:hover { border-color: #ee4d2d; background: #fff0ec; }
 .calculator[data-theme="shopee"] .fee-select { color: #ee4d2d; }
 
-.calculator[data-theme="tiktok"] .platform-tab.active { color: #000000; border-bottom-color: #000000; }
 .calculator[data-theme="tiktok"] .btn-calc { background: #000000; }
 .calculator[data-theme="tiktok"] .btn-calc:hover { background: #1a1a1a; }
 .calculator[data-theme="tiktok"] .input-wrap:focus-within { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0,.08); }
@@ -85,18 +83,17 @@ body {
 .calculator[data-theme="tiktok"] .fee-select { color: #000000; }
 
 /* PLATFORM TABS */
-.platform-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.platform-tabs { display: flex; border-bottom: none; }
 .platform-tab {
   flex: 1; padding: 14px 16px; border: none; background: var(--bg);
   font-family: inherit; font-size: .88rem; font-weight: 700;
   color: var(--text-muted); cursor: pointer; text-align: center;
   transition: background .15s, color .15s;
-  border-bottom: 3px solid transparent;
   display: flex; align-items: center; justify-content: center; gap: 8px;
 }
-.platform-tab.active { background: var(--card); color: var(--primary); border-bottom-color: var(--primary); }
-.platform-tab:hover:not(.active) { background: var(--card); }
-.platform-logo { width: 20px; height: 20px; flex-shrink: 0; object-fit: contain; }
+.platform-tab[data-platform="shopee"].active { background: #ee4d2d; color: #fff; }
+.platform-tab[data-platform="tiktok"].active { background: #000; color: #fff; }
+.platform-tab:hover:not(.active) { background: #e9ecef; }
 
 /* HEADER / DROPDOWN */
 .calc-header { padding: 20px 28px; border-bottom: 1px solid var(--border); }
