@@ -131,6 +131,10 @@ function fillBreakdown(b) {
   $("rNet").textContent = rupiah(b.net);
   if (b.fixed > 0) { $("rowFixed").hidden = false; $("rFixed").textContent = "-" + rupiah(b.fixed); }
   else { $("rowFixed").hidden = true; }
+  // Show extra costs in breakdown if in pricing mode
+  const extra = (mode === "pricing") ? getTotalExtraCosts() : 0;
+  if (extra > 0) { $("rowExtra").hidden = false; $("rExtra").textContent = "-" + rupiah(extra); }
+  else { $("rowExtra").hidden = true; }
 }
 
 function fillProfit(net, cost) {
@@ -138,10 +142,11 @@ function fillProfit(net, cost) {
   const effectiveNet = net - extra;
   if (cost <= 0 && extra <= 0) { $("profitPanel").hidden = true; return; }
   const profit = effectiveNet - cost;
-  const margin = effectiveNet > 0 ? (profit / effectiveNet) * 100 : 0;
+  // Markup = profit / modal (lebih intuitif untuk seller)
+  const markup = cost > 0 ? (profit / cost) * 100 : 0;
   $("rCost").textContent = rupiah(cost);
   $("rProfit").textContent = rupiah(profit);
-  $("rMargin").textContent = margin.toFixed(1) + "%";
+  $("rMargin").textContent = markup.toFixed(1) + "%";
   $("profitCell").classList.toggle("good", profit >= 0);
   $("profitCell").classList.toggle("bad", profit < 0);
   $("profitPanel").hidden = false;
@@ -150,10 +155,10 @@ function fillProfit(net, cost) {
 function fillProfitSimple(net, cost) {
   if (cost <= 0) { $("profitPanel").hidden = true; return; }
   const profit = net - cost;
-  const margin = net > 0 ? (profit / net) * 100 : 0;
+  const markup = cost > 0 ? (profit / cost) * 100 : 0;
   $("rCost").textContent = rupiah(cost);
   $("rProfit").textContent = rupiah(profit);
-  $("rMargin").textContent = margin.toFixed(1) + "%";
+  $("rMargin").textContent = markup.toFixed(1) + "%";
   $("profitCell").classList.toggle("good", profit >= 0);
   $("profitCell").classList.toggle("bad", profit < 0);
   $("profitPanel").hidden = false;
@@ -231,9 +236,11 @@ function fillTTBreakdown(b) {
   $("rService").textContent = "-" + rupiah(b.proses);
   $("rFeesTotal").textContent = "-" + rupiah(b.total);
   $("rNet").textContent = rupiah(b.net);
-  // Reuse rowFixed for logistik
   $("rowFixed").hidden = false;
   $("rFixed").textContent = "-" + rupiah(b.logistik);
+  const extra = (mode === "pricing") ? getTotalExtraCosts() : 0;
+  if (extra > 0) { $("rowExtra").hidden = false; $("rExtra").textContent = "-" + rupiah(extra); }
+  else { $("rowExtra").hidden = true; }
 }
 
 function renderTiktokEarning() {
