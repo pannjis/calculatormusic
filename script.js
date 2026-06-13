@@ -41,9 +41,9 @@ function getFees() {
 
 function breakdown(price) {
   const f = getFees();
-  const admin = Math.round(price * f.admin);
-  const premi = Math.round(price * f.premi);
-  const service = Math.round(price * f.service);
+  const admin = Math.floor(price * f.admin);
+  const premi = Math.ceil(price * f.premi);
+  const service = Math.ceil(price * f.service);
   const total = admin + premi + service + f.fixed;
   return { price, admin, premi, service, fixed: f.fixed, total, net: price - total };
 }
