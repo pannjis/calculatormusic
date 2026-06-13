@@ -122,22 +122,31 @@ function fillProfit(net, cost) {
   $("profitPanel").hidden = false;
 }
 
+function fillProfitSimple(net, cost) {
+  if (cost <= 0) { $("profitPanel").hidden = true; return; }
+  const profit = net - cost;
+  const margin = net > 0 ? (profit / net) * 100 : 0;
+  $("rCost").textContent = rupiah(cost);
+  $("rProfit").textContent = rupiah(profit);
+  $("rMargin").textContent = margin.toFixed(1) + "%";
+  $("profitCell").classList.toggle("good", profit >= 0);
+  $("profitCell").classList.toggle("bad", profit < 0);
+  $("profitPanel").hidden = false;
+}
+
 function renderEarning() {
   const price = parseNum($("sellPrice").value);
   if (price <= 0) { alert("Masukkan harga jual."); return; }
   const cost = parseNum($("costPrice").value);
-  const extra = getTotalExtraCosts();
   const b = breakdown(price);
 
   $("resultHero").className = "result-hero";
   $("rhLabel").textContent = "Estimasi Dana Cair";
-  $("rhValue").textContent = rupiah(b.net - extra);
-  $("rhNote").textContent = extra > 0
-    ? "Dana platform: " + rupiah(b.net) + " — Biaya tambahan: " + rupiah(extra)
-    : "Dari harga jual " + rupiah(price);
+  $("rhValue").textContent = rupiah(b.net);
+  $("rhNote").textContent = "Dari harga jual " + rupiah(price);
 
   fillBreakdown(b);
-  fillProfit(b.net, cost);
+  fillProfitSimple(b.net, cost);
   showResult();
 }
 
@@ -204,20 +213,17 @@ function renderTiktokEarning() {
   const price = parseNum($("ttSellPrice").value);
   if (price <= 0) { alert("Masukkan harga jual."); return; }
   const cost = parseNum($("ttCostPrice").value);
-  const extra = getTotalExtraCosts();
   const b = ttBreakdown(price);
 
   setTTLabels();
 
   $("resultHero").className = "result-hero";
   $("rhLabel").textContent = "Estimasi Dana Cair (TikTok)";
-  $("rhValue").textContent = rupiah(b.net - extra);
-  $("rhNote").textContent = extra > 0
-    ? "Dana platform: " + rupiah(b.net) + " — Biaya tambahan: " + rupiah(extra)
-    : "Dari harga jual " + rupiah(price);
+  $("rhValue").textContent = rupiah(b.net);
+  $("rhNote").textContent = "Dari harga jual " + rupiah(price);
 
   fillTTBreakdown(b);
-  fillProfit(b.net, cost);
+  fillProfitSimple(b.net, cost);
   showResult();
 }
 
@@ -273,18 +279,13 @@ function renderTargetNet() {
   const cost = parseNum($("tnCost").value);
   if (target <= 0) { alert("Masukkan target dana cair."); return; }
 
-  const extra = getTotalExtraCosts();
-  // Target dana cair = dana dari platform - biaya tambahan
-  // Jadi dana platform yang dibutuhkan = target + biaya tambahan
-  const netNeeded = target + extra;
-
   const f = getFees();
   const totalRate = f.admin + f.premi + f.service;
-  let price = Math.ceil((netNeeded + f.fixed) / (1 - totalRate));
+  let price = Math.ceil((target + f.fixed) / (1 - totalRate));
 
   for (let i = 0; i < 200; i++) {
     const b = breakdown(price);
-    if (b.net >= netNeeded) break;
+    if (b.net >= target) break;
     price++;
   }
 
@@ -294,10 +295,10 @@ function renderTargetNet() {
   $("resultHero").className = "result-hero pricing";
   $("rhLabel").textContent = "Harga Jual untuk Target Dana Cair";
   $("rhValue").textContent = rupiah(price);
-  $("rhNote").textContent = "Dana platform: " + rupiah(b.net) + (extra > 0 ? " — Biaya tambahan: " + rupiah(extra) : "") + " — Dana bersih: " + rupiah(b.net - extra);
+  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (cost > 0 ? " — Untung: " + rupiah(b.net - cost) : "");
 
   fillBreakdown(b);
-  fillProfit(b.net, cost);
+  fillProfitSimple(b.net, cost);
   showResult();
 }
 
@@ -309,17 +310,14 @@ function renderTiktokTargetNet() {
   const cost = parseNum($("ttTnCost").value);
   if (target <= 0) { alert("Masukkan target dana cair."); return; }
 
-  const extra = getTotalExtraCosts();
-  const netNeeded = target + extra;
-
   const f = getTTFees();
   const totalRate = f.komisi + f.dinamis;
   const fixedTotal = f.proses + f.logistik;
-  let price = Math.ceil((netNeeded + fixedTotal) / (1 - totalRate));
+  let price = Math.ceil((target + fixedTotal) / (1 - totalRate));
 
   for (let i = 0; i < 200; i++) {
     const b = ttBreakdown(price);
-    if (b.net >= netNeeded) break;
+    if (b.net >= target) break;
     price++;
   }
 
@@ -329,10 +327,10 @@ function renderTiktokTargetNet() {
   $("resultHero").className = "result-hero pricing";
   $("rhLabel").textContent = "Harga Jual untuk Target Dana Cair (TikTok)";
   $("rhValue").textContent = rupiah(price);
-  $("rhNote").textContent = "Dana platform: " + rupiah(b.net) + (extra > 0 ? " — Biaya tambahan: " + rupiah(extra) : "") + " — Dana bersih: " + rupiah(b.net - extra);
+  $("rhNote").textContent = "Dana cair: " + rupiah(b.net) + (cost > 0 ? " — Untung: " + rupiah(b.net - cost) : "");
 
   fillTTBreakdown(b);
-  fillProfit(b.net, cost);
+  fillProfitSimple(b.net, cost);
   showResult();
 }
 
@@ -358,6 +356,8 @@ function updatePanels() {
   $("tiktokTargetNetPanel").hidden = !(platform === "tiktok" && mode === "targetNet");
   $("shopeeFeeSettings").hidden = isTT;
   $("ttFeeSettings").hidden = !isTT;
+  // Biaya tambahan hanya tampil di mode Tentukan Harga Jual
+  $("extraCostsSection").hidden = mode !== "pricing";
   resetResult();
 }
 
