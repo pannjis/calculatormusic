@@ -1,8 +1,8 @@
 "use strict";
 
 const PRESETS = {
-  default:  { admin: 8.48, premi: 0.5, service: 4.5, fixed: 0 },
-  nonstar:  { admin: 8.0,  premi: 0.5, service: 4.5, fixed: 0 },
+  default:  { admin: 9.5, premi: 0.5, service: 4.5, fixed: 0 },
+  nonstar:  { admin: 9.5,  premi: 0.5, service: 4.5, fixed: 0 },
   star:     { admin: 7.5,  premi: 0.5, service: 4.0, fixed: 0 },
   starplus: { admin: 5.5,  premi: 0.5, service: 4.0, fixed: 0 },
 };
