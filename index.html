@@ -31,21 +31,15 @@
   <main class="wrap main">
     <!-- CALCULATOR -->
     <div class="calculator">
-      <div class="calc-tabs">
-        <button class="calc-tab active" data-mode="earning" type="button">
-          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-          <span class="calc-tab-text">
-            <strong>Hitung Penghasilan</strong>
-            <small>Harga jual &rarr; Dana cair</small>
-          </span>
-        </button>
-        <button class="calc-tab" data-mode="pricing" type="button">
-          <svg class="calc-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span class="calc-tab-text">
-            <strong>Tentukan Harga Jual</strong>
-            <small>Modal &rarr; Harga aman</small>
-          </span>
-        </button>
+      <div class="calc-header">
+        <label for="modeSelect" class="calc-header-label">Pilih Kalkulator</label>
+        <div class="select-wrap">
+          <select id="modeSelect" class="mode-select">
+            <option value="earning">Hitung Penghasilan — Harga jual &rarr; Dana cair</option>
+            <option value="pricing">Tentukan Harga Jual — Modal &rarr; Harga aman</option>
+          </select>
+          <svg class="select-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
       </div>
 
       <div class="calc-body">

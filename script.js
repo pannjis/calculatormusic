@@ -123,13 +123,12 @@ function renderPricing() {
 // Events
 function setMode(m) {
   mode = m;
-  document.querySelectorAll(".calc-tab").forEach((t) => t.classList.toggle("active", t.dataset.mode === m));
   $("earningPanel").hidden = m !== "earning";
   $("pricingPanel").hidden = m !== "pricing";
   resetResult();
 }
 
-document.querySelectorAll(".calc-tab").forEach((t) => t.addEventListener("click", () => setMode(t.dataset.mode)));
+$("modeSelect").addEventListener("change", (e) => setMode(e.target.value));
 
 $("presetSelect").addEventListener("change", (e) => {
   const p = PRESETS[e.target.value];
