@@ -1,7 +1,7 @@
 :root {
-  --primary: #ee4d2d;
-  --primary-dark: #d13a1c;
-  --primary-light: #fff0ec;
+  --primary: #1e3a5f;
+  --primary-dark: #152d4a;
+  --primary-light: #e8f0fa;
   --text: #1e2a3a;
   --text-muted: #64748b;
   --border: #e2e8f0;
@@ -9,6 +9,7 @@
   --card: #ffffff;
   --success: #10b981;
   --danger: #ef4444;
+  --accent: #3b82f6;
   --radius: 16px;
   --radius-sm: 10px;
   --shadow: 0 4px 16px rgba(0,0,0,.06);
@@ -85,7 +86,7 @@ body {
   appearance: none; cursor: pointer;
   transition: border-color .15s, box-shadow .15s;
 }
-.mode-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(238,77,45,.1); outline: none; }
+.mode-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30,58,95,.1); outline: none; }
 .select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; color: var(--text-muted); pointer-events: none; }
 
 /* FORM */
@@ -97,7 +98,7 @@ body {
   display: flex; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
   overflow: hidden; transition: border-color .15s, box-shadow .15s;
 }
-.input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(238,77,45,.1); }
+.input-wrap:focus-within { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(30,58,95,.1); }
 .input-prefix {
   display: flex; align-items: center; padding: 0 14px;
   background: var(--bg); font-weight: 600; font-size: .88rem;
@@ -149,7 +150,7 @@ body {
 .result-empty p { font-size: .82rem; }
 
 .result-hero { padding: 28px 24px; text-align: center; background: linear-gradient(135deg, #1e2a3a, #334155); color: #fff; }
-.result-hero.pricing { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+.result-hero.pricing { background: linear-gradient(135deg, var(--accent), #1d4ed8); }
 .rh-label { display: block; font-size: .82rem; opacity: .85; margin-bottom: 4px; }
 .rh-value { display: block; font-size: 2rem; font-weight: 900; letter-spacing: -.02em; }
 .rh-note { display: block; font-size: .76rem; opacity: .7; margin-top: 6px; }
@@ -163,7 +164,7 @@ body {
 .negative span:last-child { color: var(--danger); }
 .bd-total-section { border-bottom: none; }
 .bd-total { font-weight: 900; font-size: 1.05rem; }
-.bd-total span:last-child { color: var(--primary); font-size: 1.15rem; }
+.bd-total span:last-child { color: var(--accent); font-size: 1.15rem; }
 
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 0 24px 24px; }
 .stat-card { background: var(--bg); border-radius: var(--radius-sm); padding: 14px 10px; text-align: center; }
