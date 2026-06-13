@@ -36,6 +36,37 @@ function getActiveMode() {
   return "tiktokTargetNet";
 }
 
+// Extra Costs (Biaya Tambahan Dinamis)
+let extraCostId = 0;
+
+function addExtraCost() {
+  extraCostId++;
+  const container = $("extraCostsContainer");
+  const row = document.createElement("div");
+  row.className = "extra-cost-row";
+  row.innerHTML = `
+    <input type="text" placeholder="Nama biaya (cth: Iklan)" class="extra-name" />
+    <div class="input-wrap" style="flex:1">
+      <span class="input-prefix">Rp</span>
+      <input type="text" inputmode="numeric" placeholder="Nominal" class="extra-value" />
+    </div>
+    <button type="button" class="btn-remove" onclick="this.parentElement.remove()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  `;
+  container.appendChild(row);
+  attachFormat(row.querySelector(".extra-value"));
+  row.querySelector(".extra-value").addEventListener("keydown", (e) => { if (e.key === "Enter") $("calcBtn").click(); });
+}
+
+function getTotalExtraCosts() {
+  let total = 0;
+  document.querySelectorAll(".extra-value").forEach((inp) => { total += parseNum(inp.value); });
+  return total;
+}
+
+$("addCostBtn").addEventListener("click", addExtraCost);
+
 // Core
 function getFees() {
   return { admin: pct("adminRate"), premi: pct("premiRate"), service: pct("serviceRate"), fixed: parseNum($("fixedFee").value) };
@@ -78,9 +109,11 @@ function fillBreakdown(b) {
 }
 
 function fillProfit(net, cost) {
-  if (cost <= 0) { $("profitPanel").hidden = true; return; }
-  const profit = net - cost;
-  const margin = net > 0 ? (profit / net) * 100 : 0;
+  const extra = getTotalExtraCosts();
+  const effectiveNet = net - extra;
+  if (cost <= 0 && extra <= 0) { $("profitPanel").hidden = true; return; }
+  const profit = effectiveNet - cost;
+  const margin = effectiveNet > 0 ? (profit / effectiveNet) * 100 : 0;
   $("rCost").textContent = rupiah(cost);
   $("rProfit").textContent = rupiah(profit);
   $("rMargin").textContent = margin.toFixed(1) + "%";
@@ -93,12 +126,15 @@ function renderEarning() {
   const price = parseNum($("sellPrice").value);
   if (price <= 0) { alert("Masukkan harga jual."); return; }
   const cost = parseNum($("costPrice").value);
+  const extra = getTotalExtraCosts();
   const b = breakdown(price);
 
   $("resultHero").className = "result-hero";
   $("rhLabel").textContent = "Estimasi Dana Cair";
-  $("rhValue").textContent = rupiah(b.net);
-  $("rhNote").textContent = "Dari harga jual " + rupiah(price);
+  $("rhValue").textContent = rupiah(b.net - extra);
+  $("rhNote").textContent = extra > 0
+    ? "Dana platform: " + rupiah(b.net) + " — Biaya tambahan: " + rupiah(extra)
+    : "Dari harga jual " + rupiah(price);
 
   fillBreakdown(b);
   fillProfit(b.net, cost);
@@ -167,15 +203,17 @@ function renderTiktokEarning() {
   const price = parseNum($("ttSellPrice").value);
   if (price <= 0) { alert("Masukkan harga jual."); return; }
   const cost = parseNum($("ttCostPrice").value);
+  const extra = getTotalExtraCosts();
   const b = ttBreakdown(price);
 
-  // Relabel breakdown rows for TikTok
   setTTLabels();
 
   $("resultHero").className = "result-hero";
   $("rhLabel").textContent = "Estimasi Dana Cair (TikTok)";
-  $("rhValue").textContent = rupiah(b.net);
-  $("rhNote").textContent = "Dari harga jual " + rupiah(price);
+  $("rhValue").textContent = rupiah(b.net - extra);
+  $("rhNote").textContent = extra > 0
+    ? "Dana platform: " + rupiah(b.net) + " — Biaya tambahan: " + rupiah(extra)
+    : "Dari harga jual " + rupiah(price);
 
   fillTTBreakdown(b);
   fillProfit(b.net, cost);

@@ -112,6 +112,39 @@ body {
 .input-wrap-sm input { flex: 1; border: none; outline: none; padding: 10px 12px; font-size: .88rem; font-family: inherit; font-weight: 500; min-width: 0; width: 100%; }
 .input-suffix { display: flex; align-items: center; padding: 0 12px; background: var(--bg); font-size: .8rem; font-weight: 700; color: var(--text-muted); border-left: 1.5px solid var(--border); white-space: nowrap; }
 
+/* EXTRA COSTS */
+.extra-costs-section { margin-bottom: 22px; }
+.extra-costs-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.extra-costs-label { font-size: .84rem; font-weight: 600; }
+.extra-costs-label .opt { font-weight: 400; color: var(--text-muted); }
+.btn-add {
+  display: flex; align-items: center; gap: 5px;
+  border: 1.5px dashed var(--border); background: var(--bg);
+  padding: 7px 12px; border-radius: 8px;
+  font-family: inherit; font-size: .78rem; font-weight: 600;
+  color: var(--primary); cursor: pointer; transition: all .15s;
+}
+.btn-add:hover { border-color: var(--primary); background: var(--primary-light); }
+.btn-add-icon { width: 14px; height: 14px; }
+.extra-cost-row {
+  display: flex; gap: 8px; align-items: stretch; margin-bottom: 8px;
+}
+.extra-cost-row input[type="text"] {
+  flex: 1; border: 1.5px solid var(--border); border-radius: 8px;
+  padding: 10px 12px; font-size: .85rem; font-family: inherit;
+  font-weight: 500; min-width: 0; transition: border-color .15s;
+}
+.extra-cost-row input[type="text"]:focus { border-color: var(--primary); outline: none; }
+.extra-cost-row .input-wrap { flex: 1; }
+.btn-remove {
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; border: 1.5px solid var(--border); border-radius: 8px;
+  background: var(--bg); cursor: pointer; color: var(--danger);
+  transition: all .15s; flex-shrink: 0;
+}
+.btn-remove:hover { border-color: var(--danger); background: #fef2f2; }
+.btn-remove svg { width: 16px; height: 16px; }
+
 /* FEE SETTINGS */
 .fee-settings { border: 1.5px solid var(--border); border-radius: var(--radius-sm); margin-top: 8px; margin-bottom: 24px; }
 .fee-settings[open] { border-color: var(--primary); }
