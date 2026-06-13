@@ -67,6 +67,22 @@ function getTotalExtraCosts() {
   return total;
 }
 
+function renderExtraCostRows() {
+  const container = $("extraCostRows");
+  container.innerHTML = "";
+  if (mode !== "pricing") return;
+  document.querySelectorAll(".extra-cost-row").forEach((row) => {
+    const name = row.querySelector(".extra-name").value || "Biaya tambahan";
+    const value = parseNum(row.querySelector(".extra-value").value);
+    if (value > 0) {
+      const div = document.createElement("div");
+      div.className = "bd-row bd-sub";
+      div.innerHTML = `<span>${name}</span><span>-${rupiah(value)}</span>`;
+      container.appendChild(div);
+    }
+  });
+}
+
 $("addCostBtn").addEventListener("click", addExtraCost);
 
 // Toggle Rp / % for profit target
@@ -131,10 +147,7 @@ function fillBreakdown(b) {
   $("rNet").textContent = rupiah(b.net);
   if (b.fixed > 0) { $("rowFixed").hidden = false; $("rFixed").textContent = "-" + rupiah(b.fixed); }
   else { $("rowFixed").hidden = true; }
-  // Show extra costs in breakdown if in pricing mode
-  const extra = (mode === "pricing") ? getTotalExtraCosts() : 0;
-  if (extra > 0) { $("rowExtra").hidden = false; $("rExtra").textContent = "-" + rupiah(extra); }
-  else { $("rowExtra").hidden = true; }
+  renderExtraCostRows();
 }
 
 function fillProfit(net, cost) {
@@ -238,9 +251,7 @@ function fillTTBreakdown(b) {
   $("rNet").textContent = rupiah(b.net);
   $("rowFixed").hidden = false;
   $("rFixed").textContent = "-" + rupiah(b.logistik);
-  const extra = (mode === "pricing") ? getTotalExtraCosts() : 0;
-  if (extra > 0) { $("rowExtra").hidden = false; $("rExtra").textContent = "-" + rupiah(extra); }
-  else { $("rowExtra").hidden = true; }
+  renderExtraCostRows();
 }
 
 function renderTiktokEarning() {
